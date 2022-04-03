@@ -11,3 +11,5 @@ git config --local user.name "GitHub Action"
 git add .
 git commit -m "Update documentation" -a || true
 ```
+
+Adapted from https://github.com/ammaraskar/sphinx-action-test/tree/gh-pages
