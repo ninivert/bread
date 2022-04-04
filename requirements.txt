@@ -1,0 +1,7 @@
+# core dependencies
+numpy
+scipy
+opencv-python==4.5.5.62
+# loading data
+tifffile
+h5py

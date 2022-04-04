@@ -1,0 +1,43 @@
+name: build_documentation
+
+on:
+  # push:
+  #   branches:
+  #     - master
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # Download the repo at current stage
+    - uses: actions/checkout@v1
+
+    # Build the documentation
+    - uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: "docs/"
+        pre-build-command: apt install --yes pandoc
+
+    # Publish built docs to gh-pages branch.
+    - name: Commit documentation changes
+      run: |
+        # git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
+        git clone https://github.com/ninivert/gh-pages-template.git --branch gh-pages --single-branch gh-pages
+        cp -r docs/build/html/* gh-pages/
+        cd gh-pages
+        touch .nojekyll
+        git config --local user.email "ninivert1@gmail.com"
+        git config --local user.name "N. Vadot"
+        git add .
+        git commit -m "Update documentation" -a || true
+        # The above command will fail if no changes were present, so we ignore
+        # that.
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: gh-pages
+        directory: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
