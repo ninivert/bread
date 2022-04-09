@@ -1,4 +1,5 @@
 from enum import IntEnum
+from time import time
 import numpy as np
 import scipy.ndimage
 import warnings
@@ -156,6 +157,8 @@ class Segmentation:
 
 		Parameters
 		----------
+		time_id : int
+			frame index in the movie
 		background_id : int or None, optional
 			if not None, remove id `background_id` from the cell ids
 
@@ -172,8 +175,13 @@ class Segmentation:
 		else:
 			return all_ids
 
-	def cms(self) -> np.ndarray:
+	def cms(self, time_id: int) -> np.ndarray:
 		"""Returns centers of mass of cells in a segmentation
+
+		Parameters
+		----------
+		time_id : int
+			frame index in the movie
 
 		Returns
 		-------
@@ -181,11 +189,11 @@ class Segmentation:
 			coordinates of the centers of mass of each cell
 		"""
 
-		cell_ids = self.cell_ids()
+		cell_ids = self.cell_ids(time_id)
 		cms = np.zeros((len(cell_ids), 2))
 
 		for i, cell_id in enumerate(cell_ids):
-			cms[i] = scipy.ndimage.center_of_mass(self.data == cell_id)
+			cms[i] = scipy.ndimage.center_of_mass(self.data[time_id] == cell_id)
 
 		return cms
 
