@@ -175,13 +175,16 @@ class Segmentation:
 		else:
 			return all_ids
 
-	def cms(self, time_id: int) -> np.ndarray:
+	def cms(self, time_id: int, cell_ids: Optional[List[int]] = None) -> np.ndarray:
 		"""Returns centers of mass of cells in a segmentation
 
 		Parameters
 		----------
 		time_id : int
-			frame index in the movie
+			Frame index in the movie
+		cell_ids : List[int]
+			List of cell ids for which to compute the centers of mass, by default None.
+			If ``None``, ``cell_ids`` becomes all the cells in the frame
 
 		Returns
 		-------
@@ -189,7 +192,8 @@ class Segmentation:
 			coordinates of the centers of mass of each cell
 		"""
 
-		cell_ids = self.cell_ids(time_id)
+		if cell_ids is None:
+			cell_ids = self.cell_ids(time_id)
 		cms = np.zeros((len(cell_ids), 2))
 
 		for i, cell_id in enumerate(cell_ids):
