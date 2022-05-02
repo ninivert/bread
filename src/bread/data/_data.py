@@ -152,13 +152,13 @@ class Segmentation:
 	def __repr__(self) -> str:
 		return 'Segmentation(num_frames={}, frame_height={}, frame_width={})'.format(*self.data.shape)
 
-	def cell_ids(self, time_id: int, background_id: Optional[int]=0) -> np.ndarray:
+	def cell_ids(self, time_id: Optional[int] = None, background_id: Optional[int]=0) -> np.ndarray:
 		"""Returns cell ids from a segmentation
 
 		Parameters
 		----------
-		time_id : int
-			frame index in the movie
+		time_id : int or None, optional
+			frame index in the movie. If None, returns all the cellids encountered in the movie
 		background_id : int or None, optional
 			if not None, remove id `background_id` from the cell ids
 
@@ -168,7 +168,10 @@ class Segmentation:
 			cell ids contained in the segmentation
 		"""
 
-		all_ids = np.unique(self.data[time_id].flat)
+		if time_id is None:
+			all_ids = np.unique(self.data.flat)
+		else:
+			all_ids = np.unique(self.data[time_id].flat)
 
 		if background_id is not None:
 			return all_ids[all_ids != background_id]
