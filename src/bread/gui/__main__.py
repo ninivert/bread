@@ -11,8 +11,8 @@ if __name__ == '__main__':
 	window = App()
 	
 	APP_STATE.set_segmentation_data(Segmentation.from_h5('docs/source/examples/data/colony003_segmentation.h5'))
-	APP_STATE.set_microscopy_data(Microscopy.from_tiff('docs/source/examples/data/colony003_microscopy.tif'))
-	APP_STATE.set_budneck_data(Microscopy.from_tiff('docs/source/examples/data/colony003_GFP.tif'))
+	# APP_STATE.set_microscopy_data(Microscopy.from_tiff('docs/source/examples/data/colony003_microscopy.tif'))
+	# APP_STATE.set_budneck_data(Microscopy.from_tiff('docs/source/examples/data/colony003_GFP.tif'))
 	# APP_STATE.set_nucleus_data(Microscopy.from_tiff('docs/source/examples/data/colony003_mCherry.tif'))
 	from pathlib import Path
 	lineage_fp = Path('docs/source/examples/data/colony003_lineage.export.csv')
