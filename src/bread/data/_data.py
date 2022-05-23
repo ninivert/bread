@@ -1,4 +1,5 @@
 from enum import IntEnum
+from time import time
 import numpy as np
 import scipy.ndimage
 import warnings
@@ -63,6 +64,12 @@ class Lineage:
 	@staticmethod
 	def from_csv(filepath: Path) -> 'Lineage':
 		parent_ids, bud_ids, time_ids = np.genfromtxt(filepath, skip_header=True, delimiter=',', unpack=True, dtype=int)
+		if not isinstance(parent_ids, np.ndarray):  # in files with one line, genfromtxt returns a float, not a numpy array
+			parent_ids = np.array((parent_ids,), dtype=int)
+		if not isinstance(bud_ids, np.ndarray):  # in files with one line, genfromtxt returns a float, not a numpy array
+			bud_ids = np.array((bud_ids,), dtype=int)
+		if not isinstance(time_ids, np.ndarray):  # in files with one line, genfromtxt returns a float, not a numpy array
+			time_ids = np.array((time_ids,), dtype=int)
 		return Lineage(
 			parent_ids=parent_ids,
 			bud_ids=bud_ids,
@@ -151,11 +158,13 @@ class Segmentation:
 	def __repr__(self) -> str:
 		return 'Segmentation(num_frames={}, frame_height={}, frame_width={})'.format(*self.data.shape)
 
-	def cell_ids(self, time_id: int, background_id: Optional[int]=0) -> np.ndarray:
+	def cell_ids(self, time_id: Optional[int] = None, background_id: Optional[int]=0) -> np.ndarray:
 		"""Returns cell ids from a segmentation
 
 		Parameters
 		----------
+		time_id : int or None, optional
+			frame index in the movie. If None, returns all the cellids encountered in the movie
 		background_id : int or None, optional
 			if not None, remove id `background_id` from the cell ids
 
@@ -165,15 +174,26 @@ class Segmentation:
 			cell ids contained in the segmentation
 		"""
 
-		all_ids = np.unique(self.data[time_id].flat)
+		if time_id is None:
+			all_ids = np.unique(self.data.flat)
+		else:
+			all_ids = np.unique(self.data[time_id].flat)
 
 		if background_id is not None:
 			return all_ids[all_ids != background_id]
 		else:
 			return all_ids
 
-	def cms(self) -> np.ndarray:
+	def cms(self, time_id: int, cell_ids: Optional[List[int]] = None) -> np.ndarray:
 		"""Returns centers of mass of cells in a segmentation
+
+		Parameters
+		----------
+		time_id : int
+			Frame index in the movie
+		cell_ids : List[int]
+			List of cell ids for which to compute the centers of mass, by default None.
+			If ``None``, ``cell_ids`` becomes all the cells in the frame
 
 		Returns
 		-------
@@ -181,11 +201,12 @@ class Segmentation:
 			coordinates of the centers of mass of each cell
 		"""
 
-		cell_ids = self.cell_ids()
+		if cell_ids is None:
+			cell_ids = self.cell_ids(time_id)
 		cms = np.zeros((len(cell_ids), 2))
 
 		for i, cell_id in enumerate(cell_ids):
-			cms[i] = scipy.ndimage.center_of_mass(self.data == cell_id)
+			cms[i] = scipy.ndimage.center_of_mass(self.data[time_id] == cell_id)
 
 		return cms
 
