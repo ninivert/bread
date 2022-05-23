@@ -1,4 +1,3 @@
-from optparse import Option
 from qtpy import QtGui, QtWidgets, QtCore
 from qtpy.QtWidgets import QWidget, QMenuBar, QMainWindow, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QSlider, QTableWidget, QTableWidgetItem, QTabWidget, QGroupBox, QSpinBox, QFileDialog, QMessageBox
 from qtpy.QtGui import QAction, QIcon, QCloseEvent
@@ -9,6 +8,7 @@ import warnings
 import numpy as np
 from bread.data import Lineage, Microscopy, Segmentation
 from ._state import APP_STATE
+from ._wizards import WizardBudneck
 
 __all__ = ['Editor']
 
@@ -301,7 +301,9 @@ class Editor(QWidget):
 		self.menu_file.addAction(file_close_action)
 		self.menu_new = self.menubar.addMenu('&New')
 		# TODO : implement this
-		self.menu_new.addAction(QAction('Guess lineage using budneck', self))
+		new_lineage_budneck = QAction('Guess lineage using budneck', self)
+		new_lineage_budneck.triggered.connect(self.new_lineage_budneck)
+		self.menu_new.addAction(new_lineage_budneck)
 		# TODO : implement this
 		self.menu_new.addAction(QAction('Guess lineage using expansion speed', self))
 		self.menu_new.addSeparator()
@@ -412,6 +414,19 @@ class Editor(QWidget):
 		lineage = APP_STATE.data.segmentation.find_buds()
 		APP_STATE.add_lineage_data(lineage)
 	
+	@Slot()
+	def new_lineage_budneck(self):
+		if APP_STATE.data.segmentation is None:
+			QMessageBox.warning(self, 'bread GUI warning', 'No segmentation loaded.\nCreate an empty lineage file instead, or load a segmentation.')
+			return
+		
+		if APP_STATE.data.budneck is None:
+			QMessageBox.warning(self, 'bread GUI warning', 'No budneck channel loaded.\nCreate an empty lineage file instead, or load a budneck channel.')
+			return
+
+		wizard = WizardBudneck(self)
+		wizard.show()
+
 	@Slot(Lineage, Path)
 	def add_lineage(self, lineage: Lineage, filepath: Optional[Path]):
 		editortab = EditorTab()
