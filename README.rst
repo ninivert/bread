@@ -39,7 +39,6 @@ TODO
 ----
 
 - ``bread.vis`` package for generating debug figures
-- documentation
+- documentation GUI
 - refactor tracking with GNN
 - implement nearest neighbours for lineage
-- implement GUI

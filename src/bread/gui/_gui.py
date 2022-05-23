@@ -36,10 +36,14 @@ class App(QMainWindow):
 		# self.setStyleSheet('border: 1px solid red;')
 
 	def show_doc(self):
-		QMessageBox.information(self, 'bread GUI - documentation', '<a href="https://github.com/ninivert/bread">https://github.com/ninivert/bread</a>')
+		QMessageBox.information(self, 'bread GUI - documentation', '<p>See documentation at <a href="https://ninivert.github.io/bread/">https://ninivert.github.io/bread/</a></p>')
 
 	def show_about(self):
-		QMessageBox.information(self, 'bread GUI - about', 'bread GUI about')  # TODO
+		QMessageBox.information(self, 'bread GUI - about', '''
+			<h1>Bread GUI</h1>\
+			<p>See source code at <a href="https://github.com/ninivert/bread">https://github.com/ninivert/bread</a></p>
+			<p>See paper at <a href="#">...</a></p>
+		''')  # TODO : link paper
 
 	def quit(self):
 		self.close()
