@@ -64,6 +64,12 @@ class Lineage:
 	@staticmethod
 	def from_csv(filepath: Path) -> 'Lineage':
 		parent_ids, bud_ids, time_ids = np.genfromtxt(filepath, skip_header=True, delimiter=',', unpack=True, dtype=int)
+		if not isinstance(parent_ids, np.ndarray):  # in files with one line, genfromtxt returns a float, not a numpy array
+			parent_ids = np.array((parent_ids,), dtype=int)
+		if not isinstance(bud_ids, np.ndarray):  # in files with one line, genfromtxt returns a float, not a numpy array
+			bud_ids = np.array((bud_ids,), dtype=int)
+		if not isinstance(time_ids, np.ndarray):  # in files with one line, genfromtxt returns a float, not a numpy array
+			time_ids = np.array((time_ids,), dtype=int)
 		return Lineage(
 			parent_ids=parent_ids,
 			bud_ids=bud_ids,

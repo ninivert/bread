@@ -28,3 +28,7 @@ class App(QMainWindow):
 		self.centralWidget().layout().addWidget(self.editor)
 
 		# self.setStyleSheet('border: 1px solid red;')
+
+	def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+		APP_STATE.closing.emit()
+		event.accept()

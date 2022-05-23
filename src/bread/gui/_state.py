@@ -24,6 +24,7 @@ class AppState(QObject):
 	update_frame_index = Signal(int)
 	update_frames_max = Signal(int)
 	update_centered_cellid = Signal(int, int)
+	closing = Signal()
 
 	@dataclass
 	class AppData:
@@ -142,6 +143,7 @@ class AppState(QObject):
 	@Slot(Lineage)
 	def set_current_lineage_data(self, lineage: Optional[Lineage]) -> None:
 		self.data.current_lineage = lineage
+		print(f'current lineage : {lineage}')
 		self.update_current_lineage_data.emit(self.data.current_lineage)
 
 	@Slot(Lineage, Path)
@@ -156,6 +158,5 @@ class AppState(QObject):
 			return
 
 		self.update_centered_cellid.emit(timeid, cellid)
-
 
 APP_STATE = AppState()
