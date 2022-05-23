@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List, Tuple
+from typing import Callable, Optional, List, Tuple
 from dataclasses import dataclass
 import warnings
 import numpy as np
@@ -10,7 +10,7 @@ import scipy.ndimage
 from bread.data import Lineage, Microscopy, Segmentation, Contour, BreadException, BreadWarning
 
 __all__ = [
-	'LineageGuesserBudLum', 'LineageGuesserExpansionSpeed',
+	'LineageGuesser', 'LineageGuesserBudLum', 'LineageGuesserExpansionSpeed',
 	'LineageException', 'LineageWarning',
 	'NotEnoughFramesException', 'NotEnoughFramesWarning'
 ]
@@ -73,13 +73,15 @@ class LineageGuesser(ABC):
 		"""
 		raise NotImplementedError()
 
-	def guess_lineage(self):
+	def guess_lineage(self, progress_callback: Optional[Callable[[int, int], None]] = None):
 		"""Guess the full lineage of a given bud.
 
 		Returns
 		-------
 		lineage: Lineage
 			guessed lineage
+		progress_callback: Callable[[int, int]] or None
+			callback for progress
 		"""
 
 		lineage_init: Lineage = self.segmentation.find_buds()
@@ -88,6 +90,8 @@ class LineageGuesser(ABC):
 		# bud_ids, time_ids = bud_ids[time_ids > 0], time_ids[time_ids > 0]
 
 		for i, (bud_id, time_id) in enumerate(zip(bud_ids, time_ids)):
+			if progress_callback is not None:
+				progress_callback(i, len(time_ids))
 			if time_id == 0:
 				# cells in first frame have no parent
 				parent_ids[i] = Lineage.SpecialParentIDs.PARENT_OF_ROOT.value
@@ -224,7 +228,7 @@ class LineageGuesserBudLum(LineageGuesser, _BudneckMixin):
 	segmentation : Segmentation
 	budneck_img : Microscopy
 	nn_threshold : float, optional
-		cell masks separated by less than this threshold are considered neighbors, by default 8.0
+		Cell masks separated by less than this threshold are considered neighbors, by default 8.0
 	flexible_nn_threshold : bool, optional
 		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
 	kernel_N : int, default 30
@@ -436,7 +440,7 @@ class LineageGuesserExpansionSpeed(LineageGuesser):
 		Enabling this parameter ignores candidates for which the computed expansion speed is nan, otherwise raises an error.
 		by default True
 	bud_distance_max : float, optional
-		maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the "budding interface"
+		Maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the "budding interface"
 		by default 7
 	"""
 	num_frames: int = 5

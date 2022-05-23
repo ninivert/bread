@@ -26,17 +26,19 @@ class Layer(QGroupBox):
 		self.opacityslider.setMaximum(10)
 		self.opacityslider.setSingleStep(1)
 		self.opacityslider.setValue(10)
-		self.setLayout(QHBoxLayout())
+		self.opacitysliderlabel = QLabel('Opacity')
+		self.opacity = QWidget(self)
+		self.opacity.setLayout(QHBoxLayout())
+		self.opacity.layout().addWidget(self.opacitysliderlabel)
+		self.opacity.layout().addWidget(self.opacityslider)
+		self.setLayout(QVBoxLayout())
 		self.layout().addWidget(self.openbtn)
-		self.layout().addWidget(self.opacityslider)
+		self.layout().addWidget(self.opacity)
 
 		self.layout().setContentsMargins(0, 0, 0, 0)
 
 
 class Layers(QWidget):
-	# TODO : show opened file name
-	# TODO : button to close the file
-	# TODO : open file to start warning
 	# TODO : time shape mismatch warning
 	# TODO : shape checking for data
 	
@@ -62,7 +64,7 @@ class Layers(QWidget):
 		self.layout().addWidget(self.microscopy)
 		self.layout().addWidget(self.budneck)
 		self.layout().addWidget(self.nucleus)
-		self.setFixedWidth(200)  # TODO
+		self.setFixedWidth(200)
 		self.layout().setContentsMargins(0, 0, 0, 0)
 
 	@Slot()

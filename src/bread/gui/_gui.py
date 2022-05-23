@@ -17,10 +17,16 @@ class App(QMainWindow):
 		self.editor = Editor()
 
 		self.menu_app = self.menuBar().addMenu('Application')
-		self.menu_app.addAction(QAction('Documentation', self))
-		self.menu_app.addAction(QAction('About', self))
+		show_doc = QAction('Documentation', self)
+		show_doc.triggered.connect(self.show_doc)
+		self.menu_app.addAction(show_doc)
+		show_about = QAction('About', self)
+		show_about.triggered.connect(self.show_about)
+		self.menu_app.addAction(show_about)
 		self.menu_app.addSeparator()
-		self.menu_app.addAction(QAction('Quit', self))
+		action_quit = QAction('Quit', self)
+		action_quit.triggered.connect(self.quit)
+		self.menu_app.addAction(action_quit)
 
 		self.setCentralWidget(QWidget())
 		self.centralWidget().setLayout(QHBoxLayout())
@@ -28,6 +34,15 @@ class App(QMainWindow):
 		self.centralWidget().layout().addWidget(self.editor)
 
 		# self.setStyleSheet('border: 1px solid red;')
+
+	def show_doc(self):
+		QMessageBox.information(self, 'bread GUI - documentation', '<a href="https://github.com/ninivert/bread">https://github.com/ninivert/bread</a>')
+
+	def show_about(self):
+		QMessageBox.information(self, 'bread GUI - about', 'bread GUI about')  # TODO
+
+	def quit(self):
+		self.close()
 
 	def closeEvent(self, event: QtGui.QCloseEvent) -> None:
 		APP_STATE.closing.emit()

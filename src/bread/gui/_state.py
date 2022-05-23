@@ -143,7 +143,6 @@ class AppState(QObject):
 	@Slot(Lineage)
 	def set_current_lineage_data(self, lineage: Optional[Lineage]) -> None:
 		self.data.current_lineage = lineage
-		print(f'current lineage : {lineage}')
 		self.update_current_lineage_data.emit(self.data.current_lineage)
 
 	@Slot(Lineage, Path)

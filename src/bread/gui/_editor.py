@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 from bread.data import Lineage, Microscopy, Segmentation
 from ._state import APP_STATE
-from ._wizards import WizardBudneck
+from ._wizards import GuesserWizard
 
 __all__ = ['Editor']
 
@@ -300,12 +300,12 @@ class Editor(QWidget):
 		file_close_action.triggered.connect(lambda *_, **__: self.file_close())  # discard the arguments passed
 		self.menu_file.addAction(file_close_action)
 		self.menu_new = self.menubar.addMenu('&New')
-		# TODO : implement this
 		new_lineage_budneck = QAction('Guess lineage using budneck', self)
-		new_lineage_budneck.triggered.connect(self.new_lineage_budneck)
+		new_lineage_budneck.triggered.connect(lambda: self.new_lineage_guesser('LineageGuesserBudLum'))
 		self.menu_new.addAction(new_lineage_budneck)
-		# TODO : implement this
-		self.menu_new.addAction(QAction('Guess lineage using expansion speed', self))
+		new_lineage_expspeed = QAction('Guess lineage using expansion speed', self)
+		new_lineage_expspeed.triggered.connect(lambda: self.new_lineage_guesser('LineageGuesserExpansionSpeed'))
+		self.menu_new.addAction(new_lineage_expspeed)
 		self.menu_new.addSeparator()
 		new_lineage_prefilled_action = QAction('Create pre-filled lineage file', self)
 		new_lineage_prefilled_action.triggered.connect(self.new_lineage_prefilled)
@@ -372,7 +372,6 @@ class Editor(QWidget):
 		tab.name = filepath.name
 		tab.set_dirty(False)
 		APP_STATE.set_current_lineage_data(lineage)
-		# lineage.save_csv(filepath.with_name(filepath.stem + '.autosave.csv'))  # TODO : change this to override !
 
 	@Slot()
 	def file_close(self):
@@ -415,16 +414,16 @@ class Editor(QWidget):
 		APP_STATE.add_lineage_data(lineage)
 	
 	@Slot()
-	def new_lineage_budneck(self):
-		if APP_STATE.data.segmentation is None:
+	def new_lineage_guesser(self, which: str):
+		if which in ['LineageGuesserBudLum', 'LineageGuesserExpansionSpeed'] and APP_STATE.data.segmentation is None:
 			QMessageBox.warning(self, 'bread GUI warning', 'No segmentation loaded.\nCreate an empty lineage file instead, or load a segmentation.')
 			return
 		
-		if APP_STATE.data.budneck is None:
+		if which in ['LineageGuesserBudLum'] and APP_STATE.data.budneck is None:
 			QMessageBox.warning(self, 'bread GUI warning', 'No budneck channel loaded.\nCreate an empty lineage file instead, or load a budneck channel.')
 			return
 
-		wizard = WizardBudneck(self)
+		wizard = GuesserWizard(which, self)
 		wizard.show()
 
 	@Slot(Lineage, Path)
