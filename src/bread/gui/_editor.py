@@ -18,14 +18,14 @@ class RowControls(QWidget):
 
 		# IDEA : inline row controls
 		# https://forum.qt.io/topic/93621/add-buttons-in-tablewidget-s-row/8
-		self.delbtn = QPushButton('Delete row')
-		self.delbtn.setIcon(QIcon('src/bread/gui/fugue-icons-3.5.6/icons-shadowless/table-delete-row.png'))
+		self.delbtn = QPushButton('Del row')
+		self.delbtn.setIcon(QIcon(str(Path(__file__).parent / 'fugue-icons-3.5.6' / 'icons-shadowless' / 'table-delete-row.png')))
 		self.addbtn = QPushButton('Add row')
-		self.addbtn.setIcon(QIcon('src/bread/gui/fugue-icons-3.5.6/icons-shadowless/table-insert-row.png'))
-		self.moveupbtn = QPushButton('Move up')
-		self.moveupbtn.setIcon(QIcon('src/bread/gui/fugue-icons-3.5.6/icons-shadowless/arrow-090.png'))
-		self.movedownbtn = QPushButton('Move down')
-		self.movedownbtn.setIcon(QIcon('src/bread/gui/fugue-icons-3.5.6/icons-shadowless/arrow-270.png'))
+		self.addbtn.setIcon(QIcon(str(Path(__file__).parent / 'fugue-icons-3.5.6' / 'icons-shadowless' / 'table-insert-row.png')))
+		self.moveupbtn = QPushButton('Mv up')
+		self.moveupbtn.setIcon(QIcon(str(Path(__file__).parent / 'fugue-icons-3.5.6' / 'icons-shadowless' / 'arrow-090.png')))
+		self.movedownbtn = QPushButton('Mv down')
+		self.movedownbtn.setIcon(QIcon(str(Path(__file__).parent / 'fugue-icons-3.5.6' / 'icons-shadowless' / 'arrow-270.png')))
 		
 		self.setLayout(QHBoxLayout())
 		self.layout().addWidget(self.moveupbtn)
@@ -306,6 +306,12 @@ class Editor(QWidget):
 		new_lineage_expspeed = QAction('Guess lineage using expansion speed', self)
 		new_lineage_expspeed.triggered.connect(lambda: self.new_lineage_guesser('LineageGuesserExpansionSpeed'))
 		self.menu_new.addAction(new_lineage_expspeed)
+		new_lineage_mintheta = QAction('Guess lineage using min theta', self)
+		new_lineage_mintheta.triggered.connect(lambda: self.new_lineage_guesser('LineageGuesserMinTheta'))
+		self.menu_new.addAction(new_lineage_mintheta)
+		new_lineage_mindist = QAction('Guess lineage using min distance', self)
+		new_lineage_mindist.triggered.connect(lambda: self.new_lineage_guesser('LineageGuesserMinDistance'))
+		self.menu_new.addAction(new_lineage_mindist)
 		self.menu_new.addSeparator()
 		new_lineage_prefilled_action = QAction('Create pre-filled lineage file', self)
 		new_lineage_prefilled_action.triggered.connect(self.new_lineage_prefilled)
@@ -325,6 +331,8 @@ class Editor(QWidget):
 		self.layout().addWidget(self.editortabs)
 
 		APP_STATE.closing.connect(self.autosave)
+
+		self.setMaximumWidth(350)
 
 	@Slot()
 	def file_open(self):
@@ -415,7 +423,7 @@ class Editor(QWidget):
 	
 	@Slot()
 	def new_lineage_guesser(self, which: str):
-		if which in ['LineageGuesserBudLum', 'LineageGuesserExpansionSpeed'] and APP_STATE.data.segmentation is None:
+		if which in ['LineageGuesserBudLum', 'LineageGuesserExpansionSpeed', 'LineageGuesserMinDistance', 'LineageGuesserMinTheta'] and APP_STATE.data.segmentation is None:
 			QMessageBox.warning(self, 'bread GUI warning', 'No segmentation loaded.\nCreate an empty lineage file instead, or load a segmentation.')
 			return
 		

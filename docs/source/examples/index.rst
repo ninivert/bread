@@ -6,3 +6,4 @@ Examples
 	:caption: Contents:
 
 	lineage/demo
+	lineage/accuracies

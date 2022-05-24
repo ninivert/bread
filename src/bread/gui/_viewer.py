@@ -20,7 +20,7 @@ class Layer(QGroupBox):
 		super().__init__(parent, *args, **kwargs)
 
 		self.openbtn = QPushButton('Open')
-		self.openbtn.setIcon(QIcon('src/bread/gui/fugue-icons-3.5.6/icons-shadowless/folder-open-image.png'))
+		self.openbtn.setIcon(QIcon(str(Path(__file__).parent / 'fugue-icons-3.5.6' / 'icons-shadowless' / 'folder-open-image.png')))
 		self.opacityslider = QSlider(QtCore.Qt.Horizontal)
 		self.opacityslider.setMinimum(0)
 		self.opacityslider.setMaximum(10)
@@ -134,10 +134,10 @@ class Timeline(QWidget):
 		super().__init__(parent)
 
 		self.prevbtn = QPushButton('Previous frame')
-		self.prevbtn.setIcon(QIcon('src/bread/gui/fugue-icons-3.5.6/icons-shadowless/arrow-180.png'))
+		self.prevbtn.setIcon(QIcon(str(Path(__file__).parent / 'fugue-icons-3.5.6' / 'icons-shadowless' / 'arrow-180.png')))
 		self.prevbtn.clicked.connect(lambda: APP_STATE.set_frame_index(APP_STATE.values.frame_index-1))
 		self.nextbtn = QPushButton('Next frame')
-		self.nextbtn.setIcon(QIcon('src/bread/gui/fugue-icons-3.5.6/icons-shadowless/arrow.png'))
+		self.nextbtn.setIcon(QIcon(str(Path(__file__).parent / 'fugue-icons-3.5.6' / 'icons-shadowless' / 'arrow.png')))
 		self.nextbtn.clicked.connect(lambda: APP_STATE.set_frame_index(APP_STATE.values.frame_index+1))
 		
 		self.framespinbox = QSpinBox()

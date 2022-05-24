@@ -3,7 +3,7 @@ from typing import Optional, List
 import warnings
 from qtpy.QtWidgets import QWidget, QMenuBar, QMainWindow, QFormLayout, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QSlider, QTableWidget, QTableWidgetItem, QTabWidget, QGroupBox, QSpinBox, QDoubleSpinBox, QFileDialog, QMessageBox, QWizard, QWizardPage, QProgressBar, QProgressDialog
 from qtpy.QtCore import QObject, Signal, Slot, QThread
-from bread.algo.lineage import LineageGuesser, LineageGuesserBudLum, LineageGuesserExpansionSpeed
+from bread.algo.lineage import *
 from bread.data import Lineage
 from ._state import APP_STATE
 
@@ -36,6 +36,8 @@ class GuesserParams(QWizardPage):
 
 		self.flexible_fn_threshold = QCheckBox(self)
 
+		self.num_frames_refractory = QSpinBox(self)
+
 		self.setLayout(QFormLayout())
 		self.layout().addRow(
 			NameAndDescription(
@@ -51,13 +53,22 @@ class GuesserParams(QWizardPage):
 			),
 			self.flexible_fn_threshold
 		)
+		self.layout().addRow(
+			NameAndDescription(
+				'Refractory period',
+				'After a parent cell has budded, exclude it from the parent pool in the next frames. It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time. A value of 0 corresponds to no refractory period. by default 0'
+			),
+			self.num_frames_refractory
+		)
 
 		self.registerField('nn_threshold', self.nn_threshold)
 		self.registerField('flexible_fn_threshold', self.flexible_fn_threshold)
+		self.registerField('num_frames_refractory', self.num_frames_refractory)
 
 	def initializePage(self):
 		self.nn_threshold.setValue(LineageGuesser.nn_threshold)
 		self.flexible_fn_threshold.setChecked(LineageGuesser.flexible_nn_threshold)
+		self.num_frames_refractory.setValue(LineageGuesser.num_frames_refractory)
 
 
 class GuesserBudneckParams(GuesserParams):
@@ -94,7 +105,7 @@ class GuesserBudneckParams(GuesserParams):
 		self.layout().addRow(
 			NameAndDescription(
 				'Offset frames',
-				'Wait this number of frames after bud appears to look at the budneck marker channel. by default 0'
+				'Wait this number of frames after bud appears before guessing parent. Useful if the GFP peak is often delayed. by default 0'
 			),
 			self.offset_frames
 		)
@@ -164,6 +175,48 @@ class GuesserExpSpeedParams(GuesserParams):
 		self.bud_distance_max.setValue(LineageGuesserExpansionSpeed.bud_distance_max)
 
 
+class GuesserMinThetaParams(GuesserParams):
+	def __init__(self, parent: Optional[QWidget] = None) -> None:
+		super().__init__(parent)
+
+		self.offset_frames = QSpinBox(self)
+		self.offset_frames.setMinimum(0)
+
+		self.num_frames = QSpinBox(self)
+		self.num_frames.setMinimum(0)
+
+		self.layout().addRow(
+			NameAndDescription(
+				'Offset frames',
+				'Wait this number of frames after bud appears before guessing parent. by default 0'
+			),
+			self.offset_frames
+		)
+		self.layout().addRow(
+			NameAndDescription(
+				'Number of frames',
+				'Number of frames to make guesses for after the bud has appeared. The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy. by default 5'
+			),
+			self.num_frames
+		)
+
+		self.registerField('offset_frames', self.offset_frames)
+		self.registerField('num_frames', self.num_frames)
+
+	def initializePage(self):
+		super().initializePage()
+		self.offset_frames.setValue(LineageGuesserMinTheta.offset_frames)
+		self.num_frames.setValue(LineageGuesserMinTheta.num_frames)
+
+
+class GuesserMinDistanceParams(GuesserParams):
+	def __init__(self, parent: Optional[QWidget] = None) -> None:
+		super().__init__(parent)
+
+	def initializePage(self):
+		super().initializePage()
+
+
 class GuesserLaunch(QWizardPage):
 	def __init__(self, parent: Optional[QWidget] = None) -> None:
 		super().__init__(parent)
@@ -225,6 +278,7 @@ class GuesserBudneckLaunch(GuesserLaunch):
 		return LineageGuesserBudLum(
 			segmentation=segmentation,
 			budneck_img=budneck_img,
+			num_frames_refractory=self.field('num_frames_refractory'),
 			nn_threshold=self.field('nn_threshold'),
 			flexible_nn_threshold=self.field('flexible_fn_threshold'),
 			kernel_N=self.field('kernel_N'),
@@ -244,8 +298,42 @@ class GuesserExpSpeedLaunch(GuesserLaunch):
 		return LineageGuesserExpansionSpeed(
 			segmentation=segmentation,
 			nn_threshold=self.field('nn_threshold'),
+			num_frames_refractory=self.field('num_frames_refractory'),
+			flexible_nn_threshold=self.field('flexible_fn_threshold'),
 			ignore_dist_nan=self.field('ignore_dist_nan'),
 			bud_distance_max=self.field('bud_distance_max'),
+		)
+
+
+class GuesserMinThetaLaunch(GuesserLaunch):
+	def __init__(self, parent: Optional[QWidget] = None) -> None:
+		super().__init__(parent)
+
+	def guesser(self):
+		segmentation = APP_STATE.data.segmentation
+
+		return LineageGuesserMinTheta(
+			segmentation=segmentation,
+			nn_threshold=self.field('nn_threshold'),
+			num_frames_refractory=self.field('num_frames_refractory'),
+			flexible_nn_threshold=self.field('flexible_fn_threshold'),
+			num_frames=self.field('num_frames'),
+			offset_frames=self.field('offset_frames'),
+		)
+
+
+class GuesserMinDistanceLaunch(GuesserLaunch):
+	def __init__(self, parent: Optional[QWidget] = None) -> None:
+		super().__init__(parent)
+
+	def guesser(self):
+		segmentation = APP_STATE.data.segmentation
+
+		return LineageGuesserMinDistance(
+			segmentation=segmentation,
+			nn_threshold=self.field('nn_threshold'),
+			num_frames_refractory=self.field('num_frames_refractory'),
+			flexible_nn_threshold=self.field('flexible_fn_threshold'),
 		)
 
 
@@ -279,6 +367,12 @@ class GuesserWizard(QWizard):
 		elif which == 'LineageGuesserExpansionSpeed':
 			self.addPage(GuesserExpSpeedParams())
 			self.addPage(GuesserExpSpeedLaunch())
+		elif which == 'LineageGuesserMinTheta':
+			self.addPage(GuesserMinThetaParams())
+			self.addPage(GuesserMinThetaLaunch())
+		elif which == 'LineageGuesserMinDistance':
+			self.addPage(GuesserMinDistanceParams())
+			self.addPage(GuesserMinDistanceLaunch())
 		else:
 			raise RuntimeError(f'unkown lineage guesser {which}')
 
