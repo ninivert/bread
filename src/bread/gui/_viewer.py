@@ -1,11 +1,10 @@
 import numpy as np
 from qtpy import QtGui, QtWidgets, QtCore
 from qtpy.QtWidgets import QWidget, QMenuBar, QMainWindow, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QSlider, QTableWidget, QTableWidgetItem, QTabWidget, QGroupBox, QSpinBox, QFileDialog, QMessageBox
-from qtpy.QtGui import QAction, QIcon
+from qtpy.QtGui import QIcon
 from qtpy.QtCore import QObject, Signal, Slot
 from typing import Optional, List
 from pathlib import Path
-import warnings
 import pyqtgraph as pg
 from bread.data import Lineage, Microscopy, Segmentation
 from ._state import APP_STATE

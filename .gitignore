@@ -8,7 +8,6 @@ docs/source/examples/datamanip
 docs/source/examples/segmentation
 docs/source/examples/tracker
 src/bread/vis
-# src/bread/gui
 
 # tracking with gnn files
 # model training logs
