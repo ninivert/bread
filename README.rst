@@ -1,5 +1,5 @@
-``bread`` -- tracking and determining lineage of budding yeast cells
-====================================================================
+``bread`` -- determining lineage of budding yeast cells
+=======================================================
 
 Installation
 ------------
