@@ -30,16 +30,29 @@ For development :
 	pip install -e .
 
 
+Graphical user interface
+------------------------
+
+Launch the GUI using ``python -m bread.gui``.
+
+See `a video demo <https://www.youtube.com/watch?v=hBU8o04ybDg>`_
+
+.. image:: docs/source/_static/gui.png
+  :alt: bread gui
+
+.. image:: docs/source/_static/param_budlum.png
+  :alt: algorithm parameter window
+
+
 Command-line interface
 ----------------------
 
-See ``docs/source/examples/lineage/demo.ipynb``
+Launch the CLI using ``python -m bread.cli --help``.
+
+See `documentation for the CLI <https://ninivert.github.io/bread/examples/cli.html>`_
 
 TODO
 ----
 
-- ``bread.vis`` package for generating debug figures
-- documentation
-- refactor tracking with GNN
-- implement nearest neighbours for lineage
-- implement GUI
+- Paper PDF in the repository
+- Paper link in GUI about

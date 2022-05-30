@@ -1,7 +1,7 @@
 # core dependencies
-numpy
-scipy
-opencv-python==4.5.5.62
+numpy==1.21.5
+scipy==1.7.3
+opencv-python==4.5.5.64
 # loading data
-tifffile
-h5py
+tifffile==2021.11.2
+h5py==3.6.0

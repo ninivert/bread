@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List, Tuple
-from dataclasses import dataclass
+from typing import Callable, Optional, List, Tuple
+from dataclasses import dataclass, field
 import warnings
 import numpy as np
 import scipy.signal
 import scipy.spatial.distance
 import scipy.ndimage
 
-from bread.data import Lineage, Microscopy, Segmentation, Contour, BreadException, BreadWarning
+from bread.data import Lineage, Microscopy, Segmentation, Ellipse, Contour, BreadException, BreadWarning
 
 __all__ = [
-	'LineageGuesserBudLum', 'LineageGuesserExpansionSpeed',
+	'LineageGuesser', 'LineageGuesserBudLum', 'LineageGuesserExpansionSpeed', 'LineageGuesserMinDistance', 'LineageGuesserMinTheta',
 	'LineageException', 'LineageWarning',
 	'NotEnoughFramesException', 'NotEnoughFramesWarning'
 ]
@@ -37,15 +37,22 @@ class LineageGuesser(ABC):
 	----------
 	seg : Segmentation
 	nn_threshold : float, optional
-		cell masks separated by less than this threshold are considered neighbours, by default 8.0
+		Cell masks separated by less than this threshold are considered neighbours. by default 8.0.
 	flexible_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
+	num_frames_refractory : int, optional
+		After a parent cell has budded, exclude it from the parent pool in the next frames.
+		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+		A value of 0 corresponds to no refractory period.
+		by default 0.
 	"""
-
 
 	segmentation: Segmentation
 	nn_threshold: float = 8
 	flexible_nn_threshold: bool = False
+	num_frames_refractory: int = 0
+	
+	_cellids_refractory: dict = field(init=False, repr=False, default_factory=dict)
 
 	class NoGuessWarning(LineageWarning):
 		def __init__(self, bud_id: int, time_id: int, error: Exception):
@@ -73,13 +80,15 @@ class LineageGuesser(ABC):
 		"""
 		raise NotImplementedError()
 
-	def guess_lineage(self):
+	def guess_lineage(self, progress_callback: Optional[Callable[[int, int], None]] = None):
 		"""Guess the full lineage of a given bud.
 
 		Returns
 		-------
 		lineage: Lineage
 			guessed lineage
+		progress_callback: Callable[[int, int]] or None
+			callback for progress
 		"""
 
 		lineage_init: Lineage = self.segmentation.find_buds()
@@ -88,6 +97,8 @@ class LineageGuesser(ABC):
 		# bud_ids, time_ids = bud_ids[time_ids > 0], time_ids[time_ids > 0]
 
 		for i, (bud_id, time_id) in enumerate(zip(bud_ids, time_ids)):
+			if progress_callback is not None:
+				progress_callback(i, len(time_ids))
 			if time_id == 0:
 				# cells in first frame have no parent
 				parent_ids[i] = Lineage.SpecialParentIDs.PARENT_OF_ROOT.value
@@ -95,6 +106,7 @@ class LineageGuesser(ABC):
 
 			try:
 				parent_ids[i] = self.guess_parent(int(bud_id), int(time_id))  # BUGFIX : cast to an int because indexing with numpy.uint64 raises an error
+				self._cellids_refractory[parent_ids[i]] = self.num_frames_refractory
 			except BreadException as e:
 				if isinstance(e, LineageGuesser.NoCandidateParentException):
 					# the cell is too far away from any other cells, it does not belong to the colony
@@ -104,7 +116,24 @@ class LineageGuesser(ABC):
 					warnings.warn(LineageGuesser.NoGuessWarning(bud_id, time_id, e))
 					parent_ids[i] = Lineage.SpecialParentIDs.NO_GUESS.value
 
+			self._decrement_refractory()
+
 		return Lineage(parent_ids, bud_ids, time_ids)
+
+	def _decrement_refractory(self):
+		"""Decrement the time remaining for refractory cells"""
+
+		pop_cell_ids = []
+
+		# decrement cell timers
+		for cell_id in self._cellids_refractory.keys():
+			self._cellids_refractory[cell_id] -= 1
+			if self._cellids_refractory[cell_id] < 0:
+				pop_cell_ids.append(cell_id)
+
+		# remove cells which have finished their refractory period
+		for cell_id in pop_cell_ids:
+			self._cellids_refractory.pop(cell_id)
 
 	def _candidate_parents(self, time_id: int, excluded_ids: Optional[List[int]] = None, nearest_neighbours_of: Optional[int] = None) -> np.ndarray:
 		"""Generate a list of candidate parents to consider for budding events.
@@ -112,21 +141,19 @@ class LineageGuesser(ABC):
 		Parameters
 		----------
 		time_id : int
-			frame index in the movie
+			frame index in the movie.
 		excluded_ids : list[int], optional
-			Exclude these cell ids from the candidates
+			Exclude these cell ids from the candidates.
 		nearest_neighbours_of : int or None
-			Exclude cells which are not nearest neighbours of the cell with id ``nearest_neighbours_of``
+			Exclude cells which are not nearest neighbours of the cell with id ``nearest_neighbours_of``.
 			Cells for which the smallest distance to cell ``nearest_neighbours_of`` is less than ``self._nn_threshold`` are considered nearest neighbours.
-			default is `None`
+			default is `None`.
 
 		Returns
 		-------
 		candidate_ids : array-like of int
 			ids of the candidate parents
 		"""
-
-		# TODO : cooldown on the cells
 
 		cell_ids_prev, cell_ids_curr = self.segmentation.cell_ids(time_id-1), self.segmentation.cell_ids(time_id)
 		bud_ids = np.setdiff1d(cell_ids_curr, cell_ids_prev)
@@ -135,6 +162,10 @@ class LineageGuesser(ABC):
 		# remove the excluded_ids
 		if excluded_ids is not None:
 			candidate_ids = np.setdiff1d(candidate_ids, excluded_ids)
+
+		# remove refractory cells
+		refractory_ids = np.array(list(self._cellids_refractory.keys()))
+		candidate_ids = np.setdiff1d(candidate_ids, refractory_ids)
 
 		# nearest neighbours
 		if nearest_neighbours_of is not None:
@@ -209,47 +240,23 @@ class LineageGuesser(ABC):
 		num_frames_available = min(max(0, len(self.segmentation) - time_id_from), num_frames)
 		return range(time_id_from, time_id_from + num_frames_available)
 
+
 @dataclass(frozen=True)
 class _BudneckMixin:
 	# dataclass fields without default value cannot appear after data fields with default values
 	# this class provides a mixin to add the positional budneck_img argument
 	budneck_img: Microscopy
 
+
 @dataclass(frozen=True)
-class LineageGuesserBudLum(LineageGuesser, _BudneckMixin):
-	"""Guess lineage relations by looking at the budneck marker intensity along the contour of the bud.
+class _MajorityVoteMixin:
+	"""Redefine ``guess_parent`` to use a majority vote. The method uses an abstract method ``_guess_parent_singleframe`` that needs to be implemented by subclasses"""
 
-	Parameters
-	----------
-	segmentation : Segmentation
-	budneck_img : Microscopy
-	nn_threshold : float, optional
-		cell masks separated by less than this threshold are considered neighbors, by default 8.0
-	flexible_nn_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
-	kernel_N : int, default 30
-		Size of the gaussian smoothing kernel in pixels. larger means smoother intensity curves
-	kernel_sigma : int, default 1
-		Number of standard deviations to consider for the smoothing kernel
-	offset_frames : int, default 0
-		Wait this number of frames after bud appears to look at the budneck marker channel
-		TODO : Negative values indicate a lookup before bud detected (challenge : if frame studied is before the bud appeared, the contour will fail)
-	num_frames : int, default 5
-		Number of frames to watch the budneck marker channel for
-		The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy
-		TODO : break ties by least distance
-	"""
-
-	# budneck_img: Microscopy  # see _BudneckMixin
-	kernel_N: int = 30
-	kernel_sigma: int = 1
-	offset_frames: int = 0
 	num_frames: int = 5
+	offset_frames: int = 0
 
 	def __post_init__(self):
 		assert self.num_frames > 0, f'num_frames must be strictly greater than zero, got num_frames={self.num_frames}'
-		assert self.offset_frames >= 0, f'offset_frames must be greater or equal to zero, got offset_frames={self.offset_frames}'
-		assert self.segmentation.data.shape == self.budneck_img.data.shape, f'segmentation and budneck imaging must have the same shape, got segmentation data of shape {self.segmentation.data.shape} and budneck marker data of shape {self.budneck_img.data.shape}'
 
 	def guess_parent(self, bud_id: int, time_id: int) -> int:		
 		"""Guess the parent associated to a bud
@@ -299,10 +306,55 @@ class LineageGuesserBudLum(LineageGuesser, _BudneckMixin):
 		majority_id = majority_ids[0]
 
 		# warn if vote is ambiguous, i.e. 2 or more parents have been guessed the maximum number of times
+		# IDEA : return closest dist ?
 		if len(majority_ids) > 1:
 			warnings.warn(BreadWarning(f'Ambiguous vote for frame #{time_id}, bud #{bud_id}. Possible parents : {majority_ids}'))
 
 		return majority_id
+
+	@abstractmethod
+	def _guess_parent_singleframe(self, bud_id, time_id):
+		pass
+
+
+@dataclass(frozen=True)
+class LineageGuesserBudLum(_MajorityVoteMixin, LineageGuesser, _BudneckMixin):
+	"""Guess lineage relations by looking at the budneck marker intensity along the contour of the bud.
+
+	Parameters
+	----------
+	segmentation : Segmentation
+	budneck_img : Microscopy
+	nn_threshold : float, optional
+		Cell masks separated by less than this threshold are considered neighbors, by default 8.0.
+	flexible_nn_threshold : bool, optional
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
+	num_frames_refractory : int, optional
+		After a parent cell has budded, exclude it from the parent pool in the next frames.
+		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+		A value of 0 corresponds to no refractory period.
+		by default 0.
+	num_frames : int, default 5
+		Number of frames to watch the budneck marker channel for.
+		The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy.
+	offset_frames : int, default 0
+		Wait this number of frames after bud appears before guessing parent.
+		Useful if the GFP peak is often delayed.
+	kernel_N : int, default 30
+		Size of the gaussian smoothing kernel in pixels. larger means smoother intensity curves.
+	kernel_sigma : int, default 1
+		Number of standard deviations to consider for the smoothing kernel.
+	"""
+
+	# budneck_img: Microscopy  # see _BudneckMixin
+	# num_frames: int = 5  # see _MajorityVoteMixin
+	# offset_frames: int = 0
+	kernel_N: int = 30
+	kernel_sigma: int = 1
+
+	def __post_init__(self):
+		assert self.offset_frames >= 0, f'offset_frames must be greater or equal to zero, got offset_frames={self.offset_frames}'
+		assert self.segmentation.data.shape == self.budneck_img.data.shape, f'segmentation and budneck imaging must have the same shape, got segmentation data of shape {self.segmentation.data.shape} and budneck marker data of shape {self.budneck_img.data.shape}'
 		
 	def _guess_parent_singleframe(self, bud_id: int, time_id: int) -> int:
 		"""Guess the parent of a bud, using the budneck marker at a certain frame.
@@ -324,7 +376,7 @@ class LineageGuesserBudLum(LineageGuesser, _BudneckMixin):
 		candidate_ids = self._candidate_parents(time_id, excluded_ids=[bud_id], nearest_neighbours_of=bud_id)
 		contours = [Contour.from_segmentation(self.segmentation, candidate_id, time_id) for candidate_id in candidate_ids]
 		
-		# Compute position of the YFP peak around the contour of the bud
+		# Compute position of the GFP peak around the contour of the bud
 		contour_peak = self._peak_contour_luminosity(bud_id, time_id)
 		# Find the min distances between `contour_peak` and all other cell borders
 		min_dists = [scipy.spatial.distance.cdist(contour.data, contour_peak[None, :]).min() for contour in contours]
@@ -422,23 +474,29 @@ class LineageGuesserExpansionSpeed(LineageGuesser):
 	----------
 	segmentation : Segmentation
 	nn_threshold : float, optional
-		cell masks separated by less than this threshold are considered neighbors, by default 8.0
+		cell masks separated by less than this threshold are considered neighbors, by default 8.0.
 	flexible_nn_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
+	num_frames_refractory : int, optional
+		After a parent cell has budded, exclude it from the parent pool in the next frames.
+		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+		A value of 0 corresponds to no refractory period.
+		by default 0.
 	num_frames : int, optional
-		How many frames to consider to compute expansion velocity
-		At least 2 frames should be considered for good results
-		by default 5
+		How many frames to consider to compute expansion velocity.
+		At least 2 frames should be considered for good results.
+		by default 5.
 	ignore_dist_nan : bool, optional
 		In some cases the computed expansion distance encounters an error (candidate parent flushed away, invalid contour, etc.),
 		then the computed distance is replaced by nan for the given frame.
 		If this happens for many frames, the computed expansion speed might be nan.
 		Enabling this parameter ignores candidates for which the computed expansion speed is nan, otherwise raises an error.
-		by default True
+		by default True.
 	bud_distance_max : float, optional
-		maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the "budding interface"
-		by default 7
+		Maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the "budding interface".
+		by default 7.
 	"""
+
 	num_frames: int = 5
 	ignore_dist_nan: bool = True
 	bud_distance_max: float = 7
@@ -604,4 +662,86 @@ class LineageGuesserExpansionSpeed(LineageGuesser):
 		return budding_point
 
 
-# TODO : EuclidianDistances
+@dataclass(frozen=True)
+class LineageGuesserMinTheta(_MajorityVoteMixin, LineageGuesser):
+	"""Guess lineage relations by minimizing the angle between the major axis of the candidates and candidate-to-bud vector.
+	
+	Parameters
+	----------
+	segmentation : Segmentation
+	nn_threshold : float, optional
+		cell masks separated by less than this threshold are considered neighbors, by default 8.0.
+	flexible_nn_threshold : bool, optional
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
+	num_frames_refractory : int, optional
+		After a parent cell has budded, exclude it from the parent pool in the next frames.
+		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+		A value of 0 corresponds to no refractory period.
+		by default 0.
+	num_frames : int, default 5
+		Number of frames to make guesses for after the bud has appeared.
+		The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy.
+	offset_frames : int, default 0
+		Wait this number of frames after bud appears before guessing parent.
+	"""
+
+	def _guess_parent_singleframe(self, bud_id, time_id):
+		candidate_ids = self._candidate_parents(time_id, excluded_ids=[bud_id], nearest_neighbours_of=bud_id)
+		candidate_cms = self.segmentation.cms(time_id, candidate_ids)
+		bud_cm = self.segmentation.cms(time_id, [bud_id])[0]
+		contours = [Contour.from_segmentation(self.segmentation, candidate_id, time_id) for candidate_id in candidate_ids]
+		ellipses = [Ellipse.from_contour(contour) for contour in contours]
+		maj_axes = [np.array([np.sin(e.angle), np.cos(e.angle)]) for e in ellipses]  # WARNING : centers of mass are (y, x)
+		vecs = [bud_cm - candidate_cm for candidate_cm in candidate_cms]
+		nvecs = [vec / np.linalg.norm(vec) for vec in vecs]
+		abscosthetas = [abs(np.dot(nvec, maj_ax)) for nvec, maj_ax in zip(nvecs, maj_axes)]
+		return candidate_ids[abscosthetas.index(max(abscosthetas))]
+
+
+@dataclass(frozen=True)
+class LineageGuesserMinDistance(LineageGuesser):
+	"""Guess lineage relations by finding the cell closest to the bud, when it appears on the segmentation.
+	
+	Parameters
+	----------
+	segmentation : Segmentation
+	nn_threshold : float, optional
+		cell masks separated by less than this threshold are considered neighbors, by default 8.0.
+	flexible_nn_threshold : bool, optional
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
+	num_frames_refractory : int, optional
+		After a parent cell has budded, exclude it from the parent pool in the next frames.
+		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+		A value of 0 corresponds to no refractory period.
+		by default 0.
+	"""
+
+	def guess_parent(self, bud_id: int, time_id: int) -> int:
+		"""Guess the parent associated to a bud
+
+		Parameters
+		----------
+		bud_id : int
+			id of the bud in the segmentation
+		time_id : int
+			frame index in the movie
+
+		Returns
+		-------
+		parent_id : int
+			guessed parent id
+		"""
+		
+		candidate_ids = self._candidate_parents(time_id, excluded_ids=[bud_id], nearest_neighbours_of=bud_id)
+
+		if len(candidate_ids) == 0:
+			return Lineage.SpecialParentIDs.PARENT_OF_EXTERNAL.value
+
+		contour_bud = Contour.from_segmentation(self.segmentation, bud_id, time_id)
+		dists = np.zeros_like(candidate_ids, dtype=float)
+
+		for i, parent_id in enumerate(candidate_ids):
+			contour_parent = Contour.from_segmentation(self.segmentation, parent_id, time_id)
+			dists[i] = self._nearest_points(contour_bud, contour_parent)[-1]
+
+		return candidate_ids[np.argmin(dists)]

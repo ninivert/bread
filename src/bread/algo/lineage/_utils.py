@@ -1,4 +1,3 @@
-import numpy as np
 from bread.data import Lineage, Segmentation
 
 __all__ = ['extend_budding_event']
@@ -15,4 +14,4 @@ def extend_budding_event(lineage: Lineage, time_index_num, time_index_max=None):
 			lineage_extended['bud_id'].append(bud_id)
 			lineage_extended['time_index'].append(time_index+dt)
 
-	return pd.DataFrame(lineage_extended)
+	return lineage_extended
