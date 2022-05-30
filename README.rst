@@ -51,6 +51,12 @@ Launch the CLI using ``python -m bread.cli --help``.
 
 See `documentation for the CLI <https://ninivert.github.io/bread/examples/cli.html>`_
 
+
+Python library
+--------------
+
+`The core source code <https://github.com/ninivert/bread/blob/main/src/bread/algo/lineage/_lineage.py>`_ is `documented <https://ninivert.github.io/bread/api.html>`_
+
 TODO
 ----
 
