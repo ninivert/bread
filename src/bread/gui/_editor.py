@@ -204,6 +204,10 @@ class EditorTab(QWidget):
 				self.table.blockSignals(signalsBlocked_)  # restore state
 				return False
 
+			# cell validation depends on time validation
+			self.validate_cell(irow, 0)
+			self.validate_cell(irow, 1)
+
 		# reset color if there is no error
 		item.setBackground(QtGui.QBrush())
 		item.setToolTip('')
