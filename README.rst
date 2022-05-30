@@ -16,8 +16,8 @@ Direct installation (requires `git`)
 
 ::
 
-	# core+data dependencies
-	python -m pip install "bread[data] @ git+https://github.com/ninivert/bread.git"
+	# core+data+gui dependencies
+	python -m pip install "bread[data,gui] @ git+https://github.com/ninivert/bread.git"
 
 For development :
 
