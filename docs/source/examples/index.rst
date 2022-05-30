@@ -7,3 +7,4 @@ Examples
 
 	lineage/demo
 	lineage/accuracies
+	cli

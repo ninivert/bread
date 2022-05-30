@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from mimetypes import init
 from typing import Callable, Optional, List, Tuple
 from dataclasses import dataclass, field
 import warnings
@@ -38,14 +37,14 @@ class LineageGuesser(ABC):
 	----------
 	seg : Segmentation
 	nn_threshold : float, optional
-		Cell masks separated by less than this threshold are considered neighbours. by default 8.0
+		Cell masks separated by less than this threshold are considered neighbours. by default 8.0.
 	flexible_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
 	num_frames_refractory : int, optional
 		After a parent cell has budded, exclude it from the parent pool in the next frames.
 		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
 		A value of 0 corresponds to no refractory period.
-		by default 0
+		by default 0.
 	"""
 
 	segmentation: Segmentation
@@ -142,13 +141,13 @@ class LineageGuesser(ABC):
 		Parameters
 		----------
 		time_id : int
-			frame index in the movie
+			frame index in the movie.
 		excluded_ids : list[int], optional
-			Exclude these cell ids from the candidates
+			Exclude these cell ids from the candidates.
 		nearest_neighbours_of : int or None
-			Exclude cells which are not nearest neighbours of the cell with id ``nearest_neighbours_of``
+			Exclude cells which are not nearest neighbours of the cell with id ``nearest_neighbours_of``.
 			Cells for which the smallest distance to cell ``nearest_neighbours_of`` is less than ``self._nn_threshold`` are considered nearest neighbours.
-			default is `None`
+			default is `None`.
 
 		Returns
 		-------
@@ -307,6 +306,7 @@ class _MajorityVoteMixin:
 		majority_id = majority_ids[0]
 
 		# warn if vote is ambiguous, i.e. 2 or more parents have been guessed the maximum number of times
+		# IDEA : return closest dist ?
 		if len(majority_ids) > 1:
 			warnings.warn(BreadWarning(f'Ambiguous vote for frame #{time_id}, bud #{bud_id}. Possible parents : {majority_ids}'))
 
@@ -326,26 +326,24 @@ class LineageGuesserBudLum(_MajorityVoteMixin, LineageGuesser, _BudneckMixin):
 	segmentation : Segmentation
 	budneck_img : Microscopy
 	nn_threshold : float, optional
-		Cell masks separated by less than this threshold are considered neighbors, by default 8.0
+		Cell masks separated by less than this threshold are considered neighbors, by default 8.0.
 	flexible_nn_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
 	num_frames_refractory : int, optional
 		After a parent cell has budded, exclude it from the parent pool in the next frames.
 		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
 		A value of 0 corresponds to no refractory period.
-		by default 0
+		by default 0.
 	num_frames : int, default 5
-		Number of frames to watch the budneck marker channel for
-		The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy
-		TODO : break ties by least distance
+		Number of frames to watch the budneck marker channel for.
+		The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy.
 	offset_frames : int, default 0
-		Wait this number of frames after bud appears before guessing parent
-		Useful if the GFP peak is often delayed
-		TODO : Negative values indicate a lookup before bud detected (challenge : if frame studied is before the bud appeared, the contour will fail)
+		Wait this number of frames after bud appears before guessing parent.
+		Useful if the GFP peak is often delayed.
 	kernel_N : int, default 30
-		Size of the gaussian smoothing kernel in pixels. larger means smoother intensity curves
+		Size of the gaussian smoothing kernel in pixels. larger means smoother intensity curves.
 	kernel_sigma : int, default 1
-		Number of standard deviations to consider for the smoothing kernel
+		Number of standard deviations to consider for the smoothing kernel.
 	"""
 
 	# budneck_img: Microscopy  # see _BudneckMixin
@@ -476,27 +474,27 @@ class LineageGuesserExpansionSpeed(LineageGuesser):
 	----------
 	segmentation : Segmentation
 	nn_threshold : float, optional
-		cell masks separated by less than this threshold are considered neighbors, by default 8.0
+		cell masks separated by less than this threshold are considered neighbors, by default 8.0.
 	flexible_nn_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
 	num_frames_refractory : int, optional
 		After a parent cell has budded, exclude it from the parent pool in the next frames.
 		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
 		A value of 0 corresponds to no refractory period.
-		by default 0
+		by default 0.
 	num_frames : int, optional
-		How many frames to consider to compute expansion velocity
-		At least 2 frames should be considered for good results
-		by default 5
+		How many frames to consider to compute expansion velocity.
+		At least 2 frames should be considered for good results.
+		by default 5.
 	ignore_dist_nan : bool, optional
 		In some cases the computed expansion distance encounters an error (candidate parent flushed away, invalid contour, etc.),
 		then the computed distance is replaced by nan for the given frame.
 		If this happens for many frames, the computed expansion speed might be nan.
 		Enabling this parameter ignores candidates for which the computed expansion speed is nan, otherwise raises an error.
-		by default True
+		by default True.
 	bud_distance_max : float, optional
-		Maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the "budding interface"
-		by default 7
+		Maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the "budding interface".
+		by default 7.
 	"""
 
 	num_frames: int = 5
@@ -672,18 +670,19 @@ class LineageGuesserMinTheta(_MajorityVoteMixin, LineageGuesser):
 	----------
 	segmentation : Segmentation
 	nn_threshold : float, optional
-		cell masks separated by less than this threshold are considered neighbors, by default 8.0
+		cell masks separated by less than this threshold are considered neighbors, by default 8.0.
 	flexible_nn_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
 	num_frames_refractory : int, optional
 		After a parent cell has budded, exclude it from the parent pool in the next frames.
 		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
 		A value of 0 corresponds to no refractory period.
-		by default 0
+		by default 0.
 	num_frames : int, default 5
-		Number of frames to make guesses for after the bud has appeared
-		The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy
-		TODO : break ties by least distance
+		Number of frames to make guesses for after the bud has appeared.
+		The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy.
+	offset_frames : int, default 0
+		Wait this number of frames after bud appears before guessing parent.
 	"""
 
 	def _guess_parent_singleframe(self, bud_id, time_id):
@@ -707,14 +706,14 @@ class LineageGuesserMinDistance(LineageGuesser):
 	----------
 	segmentation : Segmentation
 	nn_threshold : float, optional
-		cell masks separated by less than this threshold are considered neighbors, by default 8.0
+		cell masks separated by less than this threshold are considered neighbors, by default 8.0.
 	flexible_nn_threshold : bool, optional
-		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+		If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.
 	num_frames_refractory : int, optional
 		After a parent cell has budded, exclude it from the parent pool in the next frames.
 		It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
 		A value of 0 corresponds to no refractory period.
-		by default 0
+		by default 0.
 	"""
 
 	def guess_parent(self, bud_id: int, time_id: int) -> int:
