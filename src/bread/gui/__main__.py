@@ -1,10 +1,6 @@
 if __name__ == '__main__':
-	import os
-	if 'QT_API' not in os.environ:
-		os.environ['QT_API'] = 'pyside6'  # we use PySide6 for the QtPy API
-
 	from ._gui import App, APP_STATE
-	from qtpy import QtGui, QtWidgets, QtCore
+	from PySide6 import QtWidgets
 	from bread.data import Segmentation, Microscopy, Lineage
 
 	app = QtWidgets.QApplication([])
@@ -25,4 +21,4 @@ if __name__ == '__main__':
 	window.setWindowTitle('bread GUI')
 	window.resize(1480, 480)
 
-	app.exec_()
+	app.exec()

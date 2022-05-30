@@ -1,4 +1,4 @@
-from qtpy.QtCore import QObject, Signal, Slot
+from PySide6.QtCore import QObject, Signal, Slot
 from bread.data import Lineage, Microscopy, Segmentation
 from typing import Optional, List
 from dataclasses import dataclass, field

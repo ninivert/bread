@@ -1,8 +1,8 @@
 import numpy as np
-from qtpy import QtGui, QtWidgets, QtCore
-from qtpy.QtWidgets import QWidget, QMenuBar, QMainWindow, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QSlider, QTableWidget, QTableWidgetItem, QTabWidget, QGroupBox, QSpinBox, QFileDialog, QMessageBox
-from qtpy.QtGui import QIcon
-from qtpy.QtCore import QObject, Signal, Slot
+from PySide6 import QtGui, QtWidgets, QtCore
+from PySide6.QtWidgets import QWidget, QMenuBar, QMainWindow, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QSlider, QTableWidget, QTableWidgetItem, QTabWidget, QGroupBox, QSpinBox, QFileDialog, QMessageBox
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import QObject, Signal, Slot
 from typing import Optional, List
 from pathlib import Path
 import pyqtgraph as pg

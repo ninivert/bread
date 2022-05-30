@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Optional, List
 import warnings
-from qtpy.QtWidgets import QWidget, QMenuBar, QMainWindow, QFormLayout, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QSlider, QTableWidget, QTableWidgetItem, QTabWidget, QGroupBox, QSpinBox, QDoubleSpinBox, QFileDialog, QMessageBox, QWizard, QWizardPage, QProgressBar, QProgressDialog
-from qtpy.QtCore import QObject, Signal, Slot, QThread
+from PySide6.QtWidgets import QWidget, QMenuBar, QMainWindow, QFormLayout, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QSlider, QTableWidget, QTableWidgetItem, QTabWidget, QGroupBox, QSpinBox, QDoubleSpinBox, QFileDialog, QMessageBox, QWizard, QWizardPage, QProgressBar, QProgressDialog
+from PySide6.QtCore import QObject, Signal, Slot, QThread
 from bread.algo.lineage import *
 from bread.data import Lineage
 from ._state import APP_STATE
