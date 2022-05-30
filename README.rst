@@ -57,6 +57,11 @@ Python library
 
 `The core source code <https://github.com/ninivert/bread/blob/main/src/bread/algo/lineage/_lineage.py>`_ is `documented <https://ninivert.github.io/bread/api.html>`_
 
+Testing data
+------------
+
+The testing data can be downloaded at https://drive.google.com/file/d/1XcXTDPyDiBBlLeQpNFmugn3O6xVFfleU/view?usp=sharing.
+
 TODO
 ----
 
