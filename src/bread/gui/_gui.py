@@ -41,9 +41,9 @@ class App(QMainWindow):
 	def show_about(self):
 		QMessageBox.information(self, 'bread GUI - about', '''
 			<h1>Bread GUI</h1>\
-			<p>See source code at <a href="https://github.com/ninivert/bread">https://github.com/ninivert/bread</a></p>
-			<p>See paper at <a href="#">...</a></p>
-		''')  # TODO : link paper
+			<p>See source code at <a href="https://github.com/ninivert/bread">https://github.com/ninivert/bread</a>, and documentation <a href="https://ninivert.github.io/bread/">https://ninivert.github.io/bread/</a></p>
+			<p>See paper : <a href="https://github.com/ninivert/bread/blob/main/paper/Automatic%20lineage%20construction%20from%20time-lapse%20microscopy%20images.pdf">Automatic lineage construction from time-lapse yeast cells images</a></p>
+		''')
 
 	def quit(self):
 		self.close()
