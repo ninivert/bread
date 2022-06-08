@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`bread.algo.lineage._validation`
+========================================
+
+.. py:module:: bread.algo.lineage._validation
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   bread.algo.lineage._validation.align_lineages
+   bread.algo.lineage._validation.accuracy
+
+
+
+.. py:function:: align_lineages(lineage_truth: bread.data.Lineage, lineage_pred: bread.data.Lineage)
+
+
+.. py:function:: accuracy(lineage_truth: bread.data.Lineage, lineage_pred: bread.data.Lineage, strict: bool = True) -> float
+
+   Compute the accuracy of a guessed lineage
+
+   :param lineage_truth: ground truth lineage
+   :type lineage_truth: Lineage
+   :param lineage_pred: guessed lineage (see ``bread.algo.lineage.LineageGuesser``)
+   :type lineage_pred: Lineage
+   :param strict: penalize abscence of a guess, by default True
+   :type strict: bool, optional
+
+   :returns: **score**
+   :rtype: float
+
+

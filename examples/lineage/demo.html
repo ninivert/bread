@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lineage guesser demo &mdash; bread  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Evaluate accuracy of the different algorithms" href="accuracies.html" />
+    <link rel="prev" title="Examples" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> bread
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html"><code class="docutils literal notranslate"><span class="pre">bread</span></code> – determining lineage of budding yeast cells</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lineage guesser demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Tip-:-generate-an-empty-lineage-file-for-manual-completion">Tip : generate an empty lineage file for manual completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Lineage-guesser-using-bud-expansion-velocities">Lineage guesser using bud expansion velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Lineage-guesser-using-budneck-marker">Lineage guesser using budneck marker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Evaluating-accuracy-of-the-guesses">Evaluating accuracy of the guesses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Visualize-differences">Visualize differences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Saving-predicted-lineages">Saving predicted lineages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="accuracies.html">Evaluate accuracy of the different algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">bread</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+      <li>Lineage guesser demo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples/lineage/demo.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Lineage-guesser-demo">
+<h1>Lineage guesser demo<a class="headerlink" href="#Lineage-guesser-demo" title="Permalink to this headline"></a></h1>
+<div class="section" id="Prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#Prerequisites" title="Permalink to this headline"></a></h2>
+<p>Install <code class="docutils literal notranslate"><span class="pre">bread</span></code> : see <a class="reference external" href="https://ninivert.github.io/bread/readme.html#installation">https://ninivert.github.io/bread/readme.html#installation</a></p>
+<p>Install packages :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Optional (for this notebook, pandas is used.)
+pip install pandas
+</pre></div>
+</div>
+<p>Get example data : download and extract <a class="reference external" href="https://drive.google.com/file/d/1XcXTDPyDiBBlLeQpNFmugn3O6xVFfleU/view">https://drive.google.com/file/d/1XcXTDPyDiBBlLeQpNFmugn3O6xVFfleU/view</a></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%load_ext autoreload
+%autoreload 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from bread.algo.lineage import LineageGuesserBudLum, LineageGuesserExpansionSpeed, accuracy
+from bread.data import Lineage, Segmentation, Microscopy
+</pre></div>
+</div>
+</div>
+<p>Load the data</p>
+<p>Note : the segmentations loaded here have been corrected manually. Expect lesser performance for uncorrected segmentations obtained from YeaZ.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># using compressed numpy files (takes less space, but needs to preprocessed to be stored in this format)
+# from glob import glob
+# segmentation = Segmentation.from_npzs(sorted(glob(&#39;data/segmentations/colony003/*.npz&#39;)))
+# microscopy_budneck = Microscopy.from_npzs(sorted(glob(&#39;data/microscopy_budneck/colony003/*.npz&#39;)))
+
+# using raw microscopy (takes more space, but can be exported straight from Fiji)
+segmentation = Segmentation.from_h5(&#39;../data/colony003_segmentation.h5&#39;)
+microscopy_budneck = Microscopy.from_tiff(&#39;../data/colony003_GFP.tif&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Tip-:-generate-an-empty-lineage-file-for-manual-completion">
+<h2>Tip : generate an empty lineage file for manual completion<a class="headerlink" href="#Tip-:-generate-an-empty-lineage-file-for-manual-completion" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>segmentation.find_buds().save_csv(&#39;outputs/colony003_lineage_empty.csv&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Lineage-guesser-using-bud-expansion-velocities">
+<h2>Lineage guesser using bud expansion velocities<a class="headerlink" href="#Lineage-guesser-using-bud-expansion-velocities" title="Permalink to this headline"></a></h2>
+<p>This method needs only the segmentation file from YeaZ.</p>
+<p>Expect ~75% accuracy.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>?LineageGuesserExpansionSpeed
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Init signature:</span>
+LineageGuesserExpansionSpeed<span class="ansi-blue-fg">(</span>
+    segmentation<span class="ansi-blue-fg">:</span> bread<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">.</span>_data<span class="ansi-blue-fg">.</span>Segmentation<span class="ansi-blue-fg">,</span>
+    nn_threshold<span class="ansi-blue-fg">:</span> float <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">8</span><span class="ansi-blue-fg">,</span>
+    flexible_nn_threshold<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span>
+    num_frames_refractory<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span>
+    num_frames<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">5</span><span class="ansi-blue-fg">,</span>
+    ignore_dist_nan<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">,</span>
+    bud_distance_max<span class="ansi-blue-fg">:</span> float <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">7</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-red-fg">Docstring:</span>
+Guess lineage relations by maximizing the expansion velocity of the bud with respect to the candidate parent.
+
+Parameters
+----------
+segmentation : Segmentation
+nn_threshold : float, optional
+        cell masks separated by less than this threshold are considered neighbors, by default 8.0
+flexible_nn_threshold : bool, optional
+        If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+num_frames_refractory : int, optional
+        After a parent cell has budded, exclude it from the parent pool in the next frames.
+        It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+        A value of 0 corresponds to no refractory period.
+        by default 0
+num_frames : int, optional
+        How many frames to consider to compute expansion velocity
+        At least 2 frames should be considered for good results
+        by default 5
+ignore_dist_nan : bool, optional
+        In some cases the computed expansion distance encounters an error (candidate parent flushed away, invalid contour, etc.),
+        then the computed distance is replaced by nan for the given frame.
+        If this happens for many frames, the computed expansion speed might be nan.
+        Enabling this parameter ignores candidates for which the computed expansion speed is nan, otherwise raises an error.
+        by default True
+bud_distance_max : float, optional
+        Maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the &#34;budding interface&#34;
+        by default 7
+<span class="ansi-red-fg">File:</span>           ~/Documents/bread/src/bread/algo/lineage/_lineage.py
+<span class="ansi-red-fg">Type:</span>           ABCMeta
+<span class="ansi-red-fg">Subclasses:</span>
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>guesser_expspeed = LineageGuesserExpansionSpeed(
+    segmentation=segmentation,
+    # see docstring for more options
+)
+guesser_expspeed
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+LineageGuesserExpansionSpeed(segmentation=Segmentation(num_frames=181, frame_height=575, frame_width=625), nn_threshold=8, flexible_nn_threshold=False, num_frames_refractory=0, num_frames=5, ignore_dist_nan=True, bud_distance_max=7)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>lineage_expspeed = guesser_expspeed.guess_lineage()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:189: BreadWarning: cell #3 does not have nearest neighbours with a distance less than 8, and flexible_threshold is False.
+  warnings.warn(BreadWarning(f&#39;cell #{nearest_neighbours_of} does not have nearest neighbours with a distance less than {self.nn_threshold}, and flexible_threshold is {self.flexible_nn_threshold}.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:581: LineageWarning: Unable to determine distance due to invalid contour, got exception InvalidContourException(&#39;Unable to extract a contour from the mask. Did you check visually if the mask is connected, or large enough (found 2 nonzero pixels) ?&#39;). Computation for frame #167, bud #73, candidate #53 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine distance due to invalid contour, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id}, candidate #{parent_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:538: NotEnoughFramesWarning: Not enough frames in the movie (bud #89 at frame #177), requested 5, but only 4 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:538: NotEnoughFramesWarning: Not enough frames in the movie (bud #90 at frame #177), requested 5, but only 4 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:538: NotEnoughFramesWarning: Not enough frames in the movie (bud #91 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:538: NotEnoughFramesWarning: Not enough frames in the movie (bud #92 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:538: NotEnoughFramesWarning: Not enough frames in the movie (bud #93 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:538: NotEnoughFramesWarning: Not enough frames in the movie (bud #94 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:538: NotEnoughFramesWarning: Not enough frames in the movie (bud #95 at frame #179), requested 5, but only 2 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:116: NoGuessWarning: Unable to determine parent for bud #96 in frame #180. Got error NotEnoughFramesException(&#39;Not enough frames in the movie (bud #96 at frame #180), requested 5, but only 1 remaining (need at least 2).&#39;)
+  warnings.warn(LineageGuesser.NoGuessWarning(bud_id, time_id, e))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:116: NoGuessWarning: Unable to determine parent for bud #97 in frame #180. Got error NotEnoughFramesException(&#39;Not enough frames in the movie (bud #97 at frame #180), requested 5, but only 1 remaining (need at least 2).&#39;)
+  warnings.warn(LineageGuesser.NoGuessWarning(bud_id, time_id, e))
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Lineage-guesser-using-budneck-marker">
+<h2>Lineage guesser using budneck marker<a class="headerlink" href="#Lineage-guesser-using-budneck-marker" title="Permalink to this headline"></a></h2>
+<p>This method needs the segmentation file from YeaZ and the budneck movie (GFP marker).</p>
+<p>Expect near perfect (&gt;95%) accuracy.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>?LineageGuesserBudLum
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Init signature:</span>
+LineageGuesserBudLum<span class="ansi-blue-fg">(</span>
+    budneck_img<span class="ansi-blue-fg">:</span> bread<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">.</span>_data<span class="ansi-blue-fg">.</span>Microscopy<span class="ansi-blue-fg">,</span>
+    segmentation<span class="ansi-blue-fg">:</span> bread<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">.</span>_data<span class="ansi-blue-fg">.</span>Segmentation<span class="ansi-blue-fg">,</span>
+    nn_threshold<span class="ansi-blue-fg">:</span> float <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">8</span><span class="ansi-blue-fg">,</span>
+    flexible_nn_threshold<span class="ansi-blue-fg">:</span> bool <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span>
+    num_frames_refractory<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span>
+    num_frames<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">5</span><span class="ansi-blue-fg">,</span>
+    offset_frames<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span>
+    kernel_N<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">30</span><span class="ansi-blue-fg">,</span>
+    kernel_sigma<span class="ansi-blue-fg">:</span> int <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-red-fg">Docstring:</span>
+Guess lineage relations by looking at the budneck marker intensity along the contour of the bud.
+
+Parameters
+----------
+segmentation : Segmentation
+budneck_img : Microscopy
+nn_threshold : float, optional
+        Cell masks separated by less than this threshold are considered neighbors, by default 8.0
+flexible_nn_threshold : bool, optional
+        If no nearest neighbours are found within the given threshold, try to find the closest one, by default False
+num_frames_refractory : int, optional
+        After a parent cell has budded, exclude it from the parent pool in the next frames.
+        It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+        A value of 0 corresponds to no refractory period.
+        by default 0
+num_frames : int, default 5
+        Number of frames to watch the budneck marker channel for
+        The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy
+        TODO : break ties by least distance
+offset_frames : int, default 0
+        Wait this number of frames after bud appears before guessing parent
+        Useful if the GFP peak is often delayed
+        TODO : Negative values indicate a lookup before bud detected (challenge : if frame studied is before the bud appeared, the contour will fail)
+kernel_N : int, default 30
+        Size of the gaussian smoothing kernel in pixels. larger means smoother intensity curves
+kernel_sigma : int, default 1
+        Number of standard deviations to consider for the smoothing kernel
+<span class="ansi-red-fg">File:</span>           ~/Documents/bread/src/bread/algo/lineage/_lineage.py
+<span class="ansi-red-fg">Type:</span>           ABCMeta
+<span class="ansi-red-fg">Subclasses:</span>
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>guesser_budlum = LineageGuesserBudLum(
+    segmentation=segmentation,
+    budneck_img=microscopy_budneck,
+    # see docstring for more options
+)
+guesser_budlum
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+LineageGuesserBudLum(budneck_img=Microscopy(num_frames=181, frame_height=575, frame_width=625), segmentation=Segmentation(num_frames=181, frame_height=575, frame_width=625), nn_threshold=8, flexible_nn_threshold=False, num_frames_refractory=0, num_frames=5, offset_frames=0, kernel_N=30, kernel_sigma=1)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>lineage_budlum = guesser_budlum.guess_lineage()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:294: LineageWarning: Unable to determine parent, got exception NoCandidateParentException(&#39;No candidate parents have been found for in frame #19.&#39;). Computation for frame #19, bud #3 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine parent, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:294: LineageWarning: Unable to determine parent, got exception NoCandidateParentException(&#39;No candidate parents have been found for in frame #20.&#39;). Computation for frame #20, bud #3 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine parent, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:294: LineageWarning: Unable to determine parent, got exception NoCandidateParentException(&#39;No candidate parents have been found for in frame #167.&#39;). Computation for frame #167, bud #77 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine parent, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:294: LineageWarning: Unable to determine parent, got exception NoCandidateParentException(&#39;No candidate parents have been found for in frame #168.&#39;). Computation for frame #168, bud #77 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine parent, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:294: LineageWarning: Unable to determine parent, got exception NoCandidateParentException(&#39;No candidate parents have been found for in frame #169.&#39;). Computation for frame #169, bud #77 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine parent, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:294: LineageWarning: Unable to determine parent, got exception NoCandidateParentException(&#39;No candidate parents have been found for in frame #170.&#39;). Computation for frame #170, bud #77 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine parent, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:294: LineageWarning: Unable to determine parent, got exception NoCandidateParentException(&#39;No candidate parents have been found for in frame #171.&#39;). Computation for frame #171, bud #77 skipped.
+  warnings.warn(LineageWarning(f&#39;Unable to determine parent, got exception {repr(e)}. Computation for frame #{time_id_}, bud #{bud_id} skipped.&#39;))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #89 at frame #177), requested 5, but only 4 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #90 at frame #177), requested 5, but only 4 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #91 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #92 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #93 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #94 at frame #178), requested 5, but only 3 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #95 at frame #179), requested 5, but only 2 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #96 at frame #180), requested 5, but only 1 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+/home/niels/Documents/bread/src/bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #97 at frame #180), requested 5, but only 1 remaining.
+  warnings.warn(NotEnoughFramesWarning(bud_id, time_id, self.num_frames, len(frame_range)))
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Evaluating-accuracy-of-the-guesses">
+<h2>Evaluating accuracy of the guesses<a class="headerlink" href="#Evaluating-accuracy-of-the-guesses" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>lineage_truth = Lineage.from_csv(&#39;../data/colony003_lineage.csv&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>lineage_truth
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Lineage(parent_ids=array([-1, -1,  1,  2,  4,  2,  1,  3,  6,  2,  4,  5,  6,  2, 10,  9,  4,
+       11,  5,  3, 12,  8,  1,  7, 14,  2,  6, 10, 15, 13,  4, 20,  3,  9,
+       11, 26, 17,  5, 18,  2, 14, 19,  6, 27, 12,  3, 22, 15,  4, 31,  8,
+        1, 25, 33,  5, 11, 23, 38,  6, 10,  2, 24, 16, 20,  7, 19, 21, 42,
+       12,  3, 18,  9, 32, 43, 26, 13, -2, 46, 23,  4, 45,  5, 36, 28, 25,
+       55, 37, 49,  6, 15, 24, 22, 77, 47, 33, 27,  8]), bud_ids=array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+       35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
+       52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+       69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85,
+       86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97]), time_ids=array([  0,   0,  19,  20,  39,  40,  42,  60,  61,  62,  63,  67,  81,
+        82,  84,  85,  86,  90,  91,  93,  96,  96, 102, 103, 105, 106,
+       107, 110, 117, 117, 117, 118, 119, 120, 121, 125, 126, 128, 129,
+       129, 131, 133, 134, 135, 137, 141, 142, 144, 144, 145, 145, 146,
+       146, 147, 149, 150, 150, 151, 153, 153, 154, 155, 157, 159, 159,
+       159, 161, 162, 162, 162, 163, 163, 163, 164, 164, 167, 167, 167,
+       168, 168, 169, 170, 170, 171, 173, 174, 175, 175, 177, 177, 178,
+       178, 178, 178, 179, 180, 180]))
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>accuracy(lineage_truth, lineage_expspeed, strict=False)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.7311827956989247
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>accuracy(lineage_truth, lineage_budlum, strict=False)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.9894736842105263
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Visualize-differences">
+<h2>Visualize differences<a class="headerlink" href="#Visualize-differences" title="Permalink to this headline"></a></h2>
+<p>Note : some ParentID’s are special codes documented in <code class="docutils literal notranslate"><span class="pre">bread.data.Lineage.SpecialParentIDs</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(Lineage.SpecialParentIDs.__doc__)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Special parent IDs attributed in lineages to specify exceptions.
+
+                Attributes
+                ----------
+                PARENT_OF_ROOT : int = -1
+                        parent of a cell that already exists in first frame of colony
+                PARENT_OF_EXTERNAL : int = -2
+                        parent of a cell that does not belong to the colony
+                NO_GUESS : int = -3
+                        parent of cell for which the algorithm failed to guess
+
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from visualize_lineages import visualize_lineages
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>visualize_lineages(lineage_truth, lineage_budlum)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<style type="text/css">
+#T_942a8_row2_col0, #T_942a8_row2_col1, #T_942a8_row3_col0, #T_942a8_row3_col1, #T_942a8_row4_col0, #T_942a8_row4_col1, #T_942a8_row5_col0, #T_942a8_row5_col1, #T_942a8_row6_col0, #T_942a8_row6_col1, #T_942a8_row7_col0, #T_942a8_row7_col1, #T_942a8_row8_col0, #T_942a8_row8_col1, #T_942a8_row9_col0, #T_942a8_row9_col1, #T_942a8_row10_col0, #T_942a8_row10_col1, #T_942a8_row11_col0, #T_942a8_row11_col1, #T_942a8_row12_col0, #T_942a8_row12_col1, #T_942a8_row13_col0, #T_942a8_row13_col1, #T_942a8_row14_col0, #T_942a8_row14_col1, #T_942a8_row15_col0, #T_942a8_row15_col1, #T_942a8_row16_col0, #T_942a8_row16_col1, #T_942a8_row17_col0, #T_942a8_row17_col1, #T_942a8_row18_col0, #T_942a8_row18_col1, #T_942a8_row19_col0, #T_942a8_row19_col1, #T_942a8_row20_col0, #T_942a8_row20_col1, #T_942a8_row21_col0, #T_942a8_row21_col1, #T_942a8_row22_col0, #T_942a8_row22_col1, #T_942a8_row23_col0, #T_942a8_row23_col1, #T_942a8_row24_col0, #T_942a8_row24_col1, #T_942a8_row25_col0, #T_942a8_row25_col1, #T_942a8_row26_col0, #T_942a8_row26_col1, #T_942a8_row27_col0, #T_942a8_row27_col1, #T_942a8_row28_col0, #T_942a8_row28_col1, #T_942a8_row29_col0, #T_942a8_row29_col1, #T_942a8_row30_col0, #T_942a8_row30_col1, #T_942a8_row31_col0, #T_942a8_row31_col1, #T_942a8_row32_col0, #T_942a8_row32_col1, #T_942a8_row33_col0, #T_942a8_row33_col1, #T_942a8_row34_col0, #T_942a8_row34_col1, #T_942a8_row35_col0, #T_942a8_row35_col1, #T_942a8_row36_col0, #T_942a8_row36_col1, #T_942a8_row37_col0, #T_942a8_row37_col1, #T_942a8_row38_col0, #T_942a8_row38_col1, #T_942a8_row39_col0, #T_942a8_row39_col1, #T_942a8_row40_col0, #T_942a8_row40_col1, #T_942a8_row41_col0, #T_942a8_row41_col1, #T_942a8_row42_col0, #T_942a8_row42_col1, #T_942a8_row43_col0, #T_942a8_row43_col1, #T_942a8_row44_col0, #T_942a8_row44_col1, #T_942a8_row45_col0, #T_942a8_row45_col1, #T_942a8_row46_col0, #T_942a8_row46_col1, #T_942a8_row47_col0, #T_942a8_row47_col1, #T_942a8_row48_col0, #T_942a8_row48_col1, #T_942a8_row49_col0, #T_942a8_row49_col1, #T_942a8_row50_col0, #T_942a8_row50_col1, #T_942a8_row51_col0, #T_942a8_row51_col1, #T_942a8_row52_col0, #T_942a8_row52_col1, #T_942a8_row53_col0, #T_942a8_row53_col1, #T_942a8_row54_col0, #T_942a8_row54_col1, #T_942a8_row55_col0, #T_942a8_row55_col1, #T_942a8_row56_col0, #T_942a8_row56_col1, #T_942a8_row57_col0, #T_942a8_row57_col1, #T_942a8_row58_col0, #T_942a8_row58_col1, #T_942a8_row59_col0, #T_942a8_row59_col1, #T_942a8_row60_col0, #T_942a8_row60_col1, #T_942a8_row61_col0, #T_942a8_row61_col1, #T_942a8_row62_col0, #T_942a8_row62_col1, #T_942a8_row63_col0, #T_942a8_row63_col1, #T_942a8_row64_col0, #T_942a8_row64_col1, #T_942a8_row65_col0, #T_942a8_row65_col1, #T_942a8_row66_col0, #T_942a8_row66_col1, #T_942a8_row67_col0, #T_942a8_row67_col1, #T_942a8_row68_col0, #T_942a8_row68_col1, #T_942a8_row69_col0, #T_942a8_row69_col1, #T_942a8_row70_col0, #T_942a8_row70_col1, #T_942a8_row71_col0, #T_942a8_row71_col1, #T_942a8_row72_col0, #T_942a8_row72_col1, #T_942a8_row73_col0, #T_942a8_row73_col1, #T_942a8_row74_col0, #T_942a8_row74_col1, #T_942a8_row75_col0, #T_942a8_row75_col1, #T_942a8_row76_col0, #T_942a8_row76_col1, #T_942a8_row77_col0, #T_942a8_row77_col1, #T_942a8_row78_col0, #T_942a8_row78_col1, #T_942a8_row79_col0, #T_942a8_row79_col1, #T_942a8_row80_col0, #T_942a8_row80_col1, #T_942a8_row81_col0, #T_942a8_row81_col1, #T_942a8_row82_col0, #T_942a8_row82_col1, #T_942a8_row83_col0, #T_942a8_row83_col1, #T_942a8_row84_col0, #T_942a8_row84_col1, #T_942a8_row85_col0, #T_942a8_row85_col1, #T_942a8_row86_col0, #T_942a8_row86_col1, #T_942a8_row87_col0, #T_942a8_row87_col1, #T_942a8_row88_col0, #T_942a8_row88_col1, #T_942a8_row89_col0, #T_942a8_row89_col1, #T_942a8_row90_col0, #T_942a8_row90_col1, #T_942a8_row92_col0, #T_942a8_row92_col1, #T_942a8_row93_col0, #T_942a8_row93_col1, #T_942a8_row94_col0, #T_942a8_row94_col1, #T_942a8_row95_col0, #T_942a8_row95_col1, #T_942a8_row96_col0, #T_942a8_row96_col1 {
+  background-color: lightgreen;
+  color: black;
+}
+#T_942a8_row91_col0, #T_942a8_row91_col1 {
+  background-color: coral;
+  color: black;
+}
+</style>
+<table id="T_942a8_">
+  <thead>
+    <tr>
+      <th class="col_heading level0 col0" >ParentID (truth)</th>
+      <th class="col_heading level0 col1" >ParentID (predicted)</th>
+      <th class="col_heading level0 col2" >BudID</th>
+      <th class="col_heading level0 col3" >FrameID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_942a8_row0_col0" class="data row0 col0" >-1</td>
+      <td id="T_942a8_row0_col1" class="data row0 col1" >-1</td>
+      <td id="T_942a8_row0_col2" class="data row0 col2" >1</td>
+      <td id="T_942a8_row0_col3" class="data row0 col3" >0</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row1_col0" class="data row1 col0" >-1</td>
+      <td id="T_942a8_row1_col1" class="data row1 col1" >-1</td>
+      <td id="T_942a8_row1_col2" class="data row1 col2" >2</td>
+      <td id="T_942a8_row1_col3" class="data row1 col3" >0</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row2_col0" class="data row2 col0" >1</td>
+      <td id="T_942a8_row2_col1" class="data row2 col1" >1</td>
+      <td id="T_942a8_row2_col2" class="data row2 col2" >3</td>
+      <td id="T_942a8_row2_col3" class="data row2 col3" >19</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row3_col0" class="data row3 col0" >2</td>
+      <td id="T_942a8_row3_col1" class="data row3 col1" >2</td>
+      <td id="T_942a8_row3_col2" class="data row3 col2" >4</td>
+      <td id="T_942a8_row3_col3" class="data row3 col3" >20</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row4_col0" class="data row4 col0" >4</td>
+      <td id="T_942a8_row4_col1" class="data row4 col1" >4</td>
+      <td id="T_942a8_row4_col2" class="data row4 col2" >5</td>
+      <td id="T_942a8_row4_col3" class="data row4 col3" >39</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row5_col0" class="data row5 col0" >2</td>
+      <td id="T_942a8_row5_col1" class="data row5 col1" >2</td>
+      <td id="T_942a8_row5_col2" class="data row5 col2" >6</td>
+      <td id="T_942a8_row5_col3" class="data row5 col3" >40</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row6_col0" class="data row6 col0" >1</td>
+      <td id="T_942a8_row6_col1" class="data row6 col1" >1</td>
+      <td id="T_942a8_row6_col2" class="data row6 col2" >7</td>
+      <td id="T_942a8_row6_col3" class="data row6 col3" >42</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row7_col0" class="data row7 col0" >3</td>
+      <td id="T_942a8_row7_col1" class="data row7 col1" >3</td>
+      <td id="T_942a8_row7_col2" class="data row7 col2" >8</td>
+      <td id="T_942a8_row7_col3" class="data row7 col3" >60</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row8_col0" class="data row8 col0" >6</td>
+      <td id="T_942a8_row8_col1" class="data row8 col1" >6</td>
+      <td id="T_942a8_row8_col2" class="data row8 col2" >9</td>
+      <td id="T_942a8_row8_col3" class="data row8 col3" >61</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row9_col0" class="data row9 col0" >2</td>
+      <td id="T_942a8_row9_col1" class="data row9 col1" >2</td>
+      <td id="T_942a8_row9_col2" class="data row9 col2" >10</td>
+      <td id="T_942a8_row9_col3" class="data row9 col3" >62</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row10_col0" class="data row10 col0" >4</td>
+      <td id="T_942a8_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_942a8_row10_col2" class="data row10 col2" >11</td>
+      <td id="T_942a8_row10_col3" class="data row10 col3" >63</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row11_col0" class="data row11 col0" >5</td>
+      <td id="T_942a8_row11_col1" class="data row11 col1" >5</td>
+      <td id="T_942a8_row11_col2" class="data row11 col2" >12</td>
+      <td id="T_942a8_row11_col3" class="data row11 col3" >67</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row12_col0" class="data row12 col0" >6</td>
+      <td id="T_942a8_row12_col1" class="data row12 col1" >6</td>
+      <td id="T_942a8_row12_col2" class="data row12 col2" >13</td>
+      <td id="T_942a8_row12_col3" class="data row12 col3" >81</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row13_col0" class="data row13 col0" >2</td>
+      <td id="T_942a8_row13_col1" class="data row13 col1" >2</td>
+      <td id="T_942a8_row13_col2" class="data row13 col2" >14</td>
+      <td id="T_942a8_row13_col3" class="data row13 col3" >82</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row14_col0" class="data row14 col0" >10</td>
+      <td id="T_942a8_row14_col1" class="data row14 col1" >10</td>
+      <td id="T_942a8_row14_col2" class="data row14 col2" >15</td>
+      <td id="T_942a8_row14_col3" class="data row14 col3" >84</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row15_col0" class="data row15 col0" >9</td>
+      <td id="T_942a8_row15_col1" class="data row15 col1" >9</td>
+      <td id="T_942a8_row15_col2" class="data row15 col2" >16</td>
+      <td id="T_942a8_row15_col3" class="data row15 col3" >85</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row16_col0" class="data row16 col0" >4</td>
+      <td id="T_942a8_row16_col1" class="data row16 col1" >4</td>
+      <td id="T_942a8_row16_col2" class="data row16 col2" >17</td>
+      <td id="T_942a8_row16_col3" class="data row16 col3" >86</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row17_col0" class="data row17 col0" >11</td>
+      <td id="T_942a8_row17_col1" class="data row17 col1" >11</td>
+      <td id="T_942a8_row17_col2" class="data row17 col2" >18</td>
+      <td id="T_942a8_row17_col3" class="data row17 col3" >90</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row18_col0" class="data row18 col0" >5</td>
+      <td id="T_942a8_row18_col1" class="data row18 col1" >5</td>
+      <td id="T_942a8_row18_col2" class="data row18 col2" >19</td>
+      <td id="T_942a8_row18_col3" class="data row18 col3" >91</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row19_col0" class="data row19 col0" >3</td>
+      <td id="T_942a8_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_942a8_row19_col2" class="data row19 col2" >20</td>
+      <td id="T_942a8_row19_col3" class="data row19 col3" >93</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row20_col0" class="data row20 col0" >12</td>
+      <td id="T_942a8_row20_col1" class="data row20 col1" >12</td>
+      <td id="T_942a8_row20_col2" class="data row20 col2" >21</td>
+      <td id="T_942a8_row20_col3" class="data row20 col3" >96</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row21_col0" class="data row21 col0" >8</td>
+      <td id="T_942a8_row21_col1" class="data row21 col1" >8</td>
+      <td id="T_942a8_row21_col2" class="data row21 col2" >22</td>
+      <td id="T_942a8_row21_col3" class="data row21 col3" >96</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row22_col0" class="data row22 col0" >1</td>
+      <td id="T_942a8_row22_col1" class="data row22 col1" >1</td>
+      <td id="T_942a8_row22_col2" class="data row22 col2" >23</td>
+      <td id="T_942a8_row22_col3" class="data row22 col3" >102</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row23_col0" class="data row23 col0" >7</td>
+      <td id="T_942a8_row23_col1" class="data row23 col1" >7</td>
+      <td id="T_942a8_row23_col2" class="data row23 col2" >24</td>
+      <td id="T_942a8_row23_col3" class="data row23 col3" >103</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row24_col0" class="data row24 col0" >14</td>
+      <td id="T_942a8_row24_col1" class="data row24 col1" >14</td>
+      <td id="T_942a8_row24_col2" class="data row24 col2" >25</td>
+      <td id="T_942a8_row24_col3" class="data row24 col3" >105</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row25_col0" class="data row25 col0" >2</td>
+      <td id="T_942a8_row25_col1" class="data row25 col1" >2</td>
+      <td id="T_942a8_row25_col2" class="data row25 col2" >26</td>
+      <td id="T_942a8_row25_col3" class="data row25 col3" >106</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row26_col0" class="data row26 col0" >6</td>
+      <td id="T_942a8_row26_col1" class="data row26 col1" >6</td>
+      <td id="T_942a8_row26_col2" class="data row26 col2" >27</td>
+      <td id="T_942a8_row26_col3" class="data row26 col3" >107</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row27_col0" class="data row27 col0" >10</td>
+      <td id="T_942a8_row27_col1" class="data row27 col1" >10</td>
+      <td id="T_942a8_row27_col2" class="data row27 col2" >28</td>
+      <td id="T_942a8_row27_col3" class="data row27 col3" >110</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row28_col0" class="data row28 col0" >15</td>
+      <td id="T_942a8_row28_col1" class="data row28 col1" >15</td>
+      <td id="T_942a8_row28_col2" class="data row28 col2" >29</td>
+      <td id="T_942a8_row28_col3" class="data row28 col3" >117</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row29_col0" class="data row29 col0" >13</td>
+      <td id="T_942a8_row29_col1" class="data row29 col1" >13</td>
+      <td id="T_942a8_row29_col2" class="data row29 col2" >30</td>
+      <td id="T_942a8_row29_col3" class="data row29 col3" >117</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row30_col0" class="data row30 col0" >4</td>
+      <td id="T_942a8_row30_col1" class="data row30 col1" >4</td>
+      <td id="T_942a8_row30_col2" class="data row30 col2" >31</td>
+      <td id="T_942a8_row30_col3" class="data row30 col3" >117</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row31_col0" class="data row31 col0" >20</td>
+      <td id="T_942a8_row31_col1" class="data row31 col1" >20</td>
+      <td id="T_942a8_row31_col2" class="data row31 col2" >32</td>
+      <td id="T_942a8_row31_col3" class="data row31 col3" >118</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row32_col0" class="data row32 col0" >3</td>
+      <td id="T_942a8_row32_col1" class="data row32 col1" >3</td>
+      <td id="T_942a8_row32_col2" class="data row32 col2" >33</td>
+      <td id="T_942a8_row32_col3" class="data row32 col3" >119</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row33_col0" class="data row33 col0" >9</td>
+      <td id="T_942a8_row33_col1" class="data row33 col1" >9</td>
+      <td id="T_942a8_row33_col2" class="data row33 col2" >34</td>
+      <td id="T_942a8_row33_col3" class="data row33 col3" >120</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row34_col0" class="data row34 col0" >11</td>
+      <td id="T_942a8_row34_col1" class="data row34 col1" >11</td>
+      <td id="T_942a8_row34_col2" class="data row34 col2" >35</td>
+      <td id="T_942a8_row34_col3" class="data row34 col3" >121</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row35_col0" class="data row35 col0" >26</td>
+      <td id="T_942a8_row35_col1" class="data row35 col1" >26</td>
+      <td id="T_942a8_row35_col2" class="data row35 col2" >36</td>
+      <td id="T_942a8_row35_col3" class="data row35 col3" >125</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row36_col0" class="data row36 col0" >17</td>
+      <td id="T_942a8_row36_col1" class="data row36 col1" >17</td>
+      <td id="T_942a8_row36_col2" class="data row36 col2" >37</td>
+      <td id="T_942a8_row36_col3" class="data row36 col3" >126</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row37_col0" class="data row37 col0" >5</td>
+      <td id="T_942a8_row37_col1" class="data row37 col1" >5</td>
+      <td id="T_942a8_row37_col2" class="data row37 col2" >38</td>
+      <td id="T_942a8_row37_col3" class="data row37 col3" >128</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row38_col0" class="data row38 col0" >18</td>
+      <td id="T_942a8_row38_col1" class="data row38 col1" >18</td>
+      <td id="T_942a8_row38_col2" class="data row38 col2" >39</td>
+      <td id="T_942a8_row38_col3" class="data row38 col3" >129</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row39_col0" class="data row39 col0" >2</td>
+      <td id="T_942a8_row39_col1" class="data row39 col1" >2</td>
+      <td id="T_942a8_row39_col2" class="data row39 col2" >40</td>
+      <td id="T_942a8_row39_col3" class="data row39 col3" >129</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row40_col0" class="data row40 col0" >14</td>
+      <td id="T_942a8_row40_col1" class="data row40 col1" >14</td>
+      <td id="T_942a8_row40_col2" class="data row40 col2" >41</td>
+      <td id="T_942a8_row40_col3" class="data row40 col3" >131</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row41_col0" class="data row41 col0" >19</td>
+      <td id="T_942a8_row41_col1" class="data row41 col1" >19</td>
+      <td id="T_942a8_row41_col2" class="data row41 col2" >42</td>
+      <td id="T_942a8_row41_col3" class="data row41 col3" >133</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row42_col0" class="data row42 col0" >6</td>
+      <td id="T_942a8_row42_col1" class="data row42 col1" >6</td>
+      <td id="T_942a8_row42_col2" class="data row42 col2" >43</td>
+      <td id="T_942a8_row42_col3" class="data row42 col3" >134</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row43_col0" class="data row43 col0" >27</td>
+      <td id="T_942a8_row43_col1" class="data row43 col1" >27</td>
+      <td id="T_942a8_row43_col2" class="data row43 col2" >44</td>
+      <td id="T_942a8_row43_col3" class="data row43 col3" >135</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row44_col0" class="data row44 col0" >12</td>
+      <td id="T_942a8_row44_col1" class="data row44 col1" >12</td>
+      <td id="T_942a8_row44_col2" class="data row44 col2" >45</td>
+      <td id="T_942a8_row44_col3" class="data row44 col3" >137</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row45_col0" class="data row45 col0" >3</td>
+      <td id="T_942a8_row45_col1" class="data row45 col1" >3</td>
+      <td id="T_942a8_row45_col2" class="data row45 col2" >46</td>
+      <td id="T_942a8_row45_col3" class="data row45 col3" >141</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row46_col0" class="data row46 col0" >22</td>
+      <td id="T_942a8_row46_col1" class="data row46 col1" >22</td>
+      <td id="T_942a8_row46_col2" class="data row46 col2" >47</td>
+      <td id="T_942a8_row46_col3" class="data row46 col3" >142</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row47_col0" class="data row47 col0" >15</td>
+      <td id="T_942a8_row47_col1" class="data row47 col1" >15</td>
+      <td id="T_942a8_row47_col2" class="data row47 col2" >48</td>
+      <td id="T_942a8_row47_col3" class="data row47 col3" >144</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row48_col0" class="data row48 col0" >4</td>
+      <td id="T_942a8_row48_col1" class="data row48 col1" >4</td>
+      <td id="T_942a8_row48_col2" class="data row48 col2" >49</td>
+      <td id="T_942a8_row48_col3" class="data row48 col3" >144</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row49_col0" class="data row49 col0" >31</td>
+      <td id="T_942a8_row49_col1" class="data row49 col1" >31</td>
+      <td id="T_942a8_row49_col2" class="data row49 col2" >50</td>
+      <td id="T_942a8_row49_col3" class="data row49 col3" >145</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row50_col0" class="data row50 col0" >8</td>
+      <td id="T_942a8_row50_col1" class="data row50 col1" >8</td>
+      <td id="T_942a8_row50_col2" class="data row50 col2" >51</td>
+      <td id="T_942a8_row50_col3" class="data row50 col3" >145</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row51_col0" class="data row51 col0" >1</td>
+      <td id="T_942a8_row51_col1" class="data row51 col1" >1</td>
+      <td id="T_942a8_row51_col2" class="data row51 col2" >52</td>
+      <td id="T_942a8_row51_col3" class="data row51 col3" >146</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row52_col0" class="data row52 col0" >25</td>
+      <td id="T_942a8_row52_col1" class="data row52 col1" >25</td>
+      <td id="T_942a8_row52_col2" class="data row52 col2" >53</td>
+      <td id="T_942a8_row52_col3" class="data row52 col3" >146</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row53_col0" class="data row53 col0" >33</td>
+      <td id="T_942a8_row53_col1" class="data row53 col1" >33</td>
+      <td id="T_942a8_row53_col2" class="data row53 col2" >54</td>
+      <td id="T_942a8_row53_col3" class="data row53 col3" >147</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row54_col0" class="data row54 col0" >5</td>
+      <td id="T_942a8_row54_col1" class="data row54 col1" >5</td>
+      <td id="T_942a8_row54_col2" class="data row54 col2" >55</td>
+      <td id="T_942a8_row54_col3" class="data row54 col3" >149</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row55_col0" class="data row55 col0" >11</td>
+      <td id="T_942a8_row55_col1" class="data row55 col1" >11</td>
+      <td id="T_942a8_row55_col2" class="data row55 col2" >56</td>
+      <td id="T_942a8_row55_col3" class="data row55 col3" >150</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row56_col0" class="data row56 col0" >23</td>
+      <td id="T_942a8_row56_col1" class="data row56 col1" >23</td>
+      <td id="T_942a8_row56_col2" class="data row56 col2" >57</td>
+      <td id="T_942a8_row56_col3" class="data row56 col3" >150</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row57_col0" class="data row57 col0" >38</td>
+      <td id="T_942a8_row57_col1" class="data row57 col1" >38</td>
+      <td id="T_942a8_row57_col2" class="data row57 col2" >58</td>
+      <td id="T_942a8_row57_col3" class="data row57 col3" >151</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row58_col0" class="data row58 col0" >6</td>
+      <td id="T_942a8_row58_col1" class="data row58 col1" >6</td>
+      <td id="T_942a8_row58_col2" class="data row58 col2" >59</td>
+      <td id="T_942a8_row58_col3" class="data row58 col3" >153</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row59_col0" class="data row59 col0" >10</td>
+      <td id="T_942a8_row59_col1" class="data row59 col1" >10</td>
+      <td id="T_942a8_row59_col2" class="data row59 col2" >60</td>
+      <td id="T_942a8_row59_col3" class="data row59 col3" >153</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row60_col0" class="data row60 col0" >2</td>
+      <td id="T_942a8_row60_col1" class="data row60 col1" >2</td>
+      <td id="T_942a8_row60_col2" class="data row60 col2" >61</td>
+      <td id="T_942a8_row60_col3" class="data row60 col3" >154</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row61_col0" class="data row61 col0" >24</td>
+      <td id="T_942a8_row61_col1" class="data row61 col1" >24</td>
+      <td id="T_942a8_row61_col2" class="data row61 col2" >62</td>
+      <td id="T_942a8_row61_col3" class="data row61 col3" >155</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row62_col0" class="data row62 col0" >16</td>
+      <td id="T_942a8_row62_col1" class="data row62 col1" >16</td>
+      <td id="T_942a8_row62_col2" class="data row62 col2" >63</td>
+      <td id="T_942a8_row62_col3" class="data row62 col3" >157</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row63_col0" class="data row63 col0" >20</td>
+      <td id="T_942a8_row63_col1" class="data row63 col1" >20</td>
+      <td id="T_942a8_row63_col2" class="data row63 col2" >64</td>
+      <td id="T_942a8_row63_col3" class="data row63 col3" >159</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row64_col0" class="data row64 col0" >7</td>
+      <td id="T_942a8_row64_col1" class="data row64 col1" >7</td>
+      <td id="T_942a8_row64_col2" class="data row64 col2" >65</td>
+      <td id="T_942a8_row64_col3" class="data row64 col3" >159</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row65_col0" class="data row65 col0" >19</td>
+      <td id="T_942a8_row65_col1" class="data row65 col1" >19</td>
+      <td id="T_942a8_row65_col2" class="data row65 col2" >66</td>
+      <td id="T_942a8_row65_col3" class="data row65 col3" >159</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row66_col0" class="data row66 col0" >21</td>
+      <td id="T_942a8_row66_col1" class="data row66 col1" >21</td>
+      <td id="T_942a8_row66_col2" class="data row66 col2" >67</td>
+      <td id="T_942a8_row66_col3" class="data row66 col3" >161</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row67_col0" class="data row67 col0" >42</td>
+      <td id="T_942a8_row67_col1" class="data row67 col1" >42</td>
+      <td id="T_942a8_row67_col2" class="data row67 col2" >68</td>
+      <td id="T_942a8_row67_col3" class="data row67 col3" >162</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row68_col0" class="data row68 col0" >12</td>
+      <td id="T_942a8_row68_col1" class="data row68 col1" >12</td>
+      <td id="T_942a8_row68_col2" class="data row68 col2" >69</td>
+      <td id="T_942a8_row68_col3" class="data row68 col3" >162</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row69_col0" class="data row69 col0" >3</td>
+      <td id="T_942a8_row69_col1" class="data row69 col1" >3</td>
+      <td id="T_942a8_row69_col2" class="data row69 col2" >70</td>
+      <td id="T_942a8_row69_col3" class="data row69 col3" >162</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row70_col0" class="data row70 col0" >18</td>
+      <td id="T_942a8_row70_col1" class="data row70 col1" >18</td>
+      <td id="T_942a8_row70_col2" class="data row70 col2" >71</td>
+      <td id="T_942a8_row70_col3" class="data row70 col3" >163</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row71_col0" class="data row71 col0" >9</td>
+      <td id="T_942a8_row71_col1" class="data row71 col1" >9</td>
+      <td id="T_942a8_row71_col2" class="data row71 col2" >72</td>
+      <td id="T_942a8_row71_col3" class="data row71 col3" >163</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row72_col0" class="data row72 col0" >32</td>
+      <td id="T_942a8_row72_col1" class="data row72 col1" >32</td>
+      <td id="T_942a8_row72_col2" class="data row72 col2" >73</td>
+      <td id="T_942a8_row72_col3" class="data row72 col3" >163</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row73_col0" class="data row73 col0" >43</td>
+      <td id="T_942a8_row73_col1" class="data row73 col1" >43</td>
+      <td id="T_942a8_row73_col2" class="data row73 col2" >74</td>
+      <td id="T_942a8_row73_col3" class="data row73 col3" >164</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row74_col0" class="data row74 col0" >26</td>
+      <td id="T_942a8_row74_col1" class="data row74 col1" >26</td>
+      <td id="T_942a8_row74_col2" class="data row74 col2" >75</td>
+      <td id="T_942a8_row74_col3" class="data row74 col3" >164</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row75_col0" class="data row75 col0" >13</td>
+      <td id="T_942a8_row75_col1" class="data row75 col1" >13</td>
+      <td id="T_942a8_row75_col2" class="data row75 col2" >76</td>
+      <td id="T_942a8_row75_col3" class="data row75 col3" >167</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row76_col0" class="data row76 col0" >-2</td>
+      <td id="T_942a8_row76_col1" class="data row76 col1" >-2</td>
+      <td id="T_942a8_row76_col2" class="data row76 col2" >77</td>
+      <td id="T_942a8_row76_col3" class="data row76 col3" >167</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row77_col0" class="data row77 col0" >46</td>
+      <td id="T_942a8_row77_col1" class="data row77 col1" >46</td>
+      <td id="T_942a8_row77_col2" class="data row77 col2" >78</td>
+      <td id="T_942a8_row77_col3" class="data row77 col3" >167</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row78_col0" class="data row78 col0" >23</td>
+      <td id="T_942a8_row78_col1" class="data row78 col1" >23</td>
+      <td id="T_942a8_row78_col2" class="data row78 col2" >79</td>
+      <td id="T_942a8_row78_col3" class="data row78 col3" >168</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row79_col0" class="data row79 col0" >4</td>
+      <td id="T_942a8_row79_col1" class="data row79 col1" >4</td>
+      <td id="T_942a8_row79_col2" class="data row79 col2" >80</td>
+      <td id="T_942a8_row79_col3" class="data row79 col3" >168</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row80_col0" class="data row80 col0" >45</td>
+      <td id="T_942a8_row80_col1" class="data row80 col1" >45</td>
+      <td id="T_942a8_row80_col2" class="data row80 col2" >81</td>
+      <td id="T_942a8_row80_col3" class="data row80 col3" >169</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row81_col0" class="data row81 col0" >5</td>
+      <td id="T_942a8_row81_col1" class="data row81 col1" >5</td>
+      <td id="T_942a8_row81_col2" class="data row81 col2" >82</td>
+      <td id="T_942a8_row81_col3" class="data row81 col3" >170</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row82_col0" class="data row82 col0" >36</td>
+      <td id="T_942a8_row82_col1" class="data row82 col1" >36</td>
+      <td id="T_942a8_row82_col2" class="data row82 col2" >83</td>
+      <td id="T_942a8_row82_col3" class="data row82 col3" >170</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row83_col0" class="data row83 col0" >28</td>
+      <td id="T_942a8_row83_col1" class="data row83 col1" >28</td>
+      <td id="T_942a8_row83_col2" class="data row83 col2" >84</td>
+      <td id="T_942a8_row83_col3" class="data row83 col3" >171</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row84_col0" class="data row84 col0" >25</td>
+      <td id="T_942a8_row84_col1" class="data row84 col1" >25</td>
+      <td id="T_942a8_row84_col2" class="data row84 col2" >85</td>
+      <td id="T_942a8_row84_col3" class="data row84 col3" >173</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row85_col0" class="data row85 col0" >55</td>
+      <td id="T_942a8_row85_col1" class="data row85 col1" >55</td>
+      <td id="T_942a8_row85_col2" class="data row85 col2" >86</td>
+      <td id="T_942a8_row85_col3" class="data row85 col3" >174</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row86_col0" class="data row86 col0" >37</td>
+      <td id="T_942a8_row86_col1" class="data row86 col1" >37</td>
+      <td id="T_942a8_row86_col2" class="data row86 col2" >87</td>
+      <td id="T_942a8_row86_col3" class="data row86 col3" >175</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row87_col0" class="data row87 col0" >49</td>
+      <td id="T_942a8_row87_col1" class="data row87 col1" >49</td>
+      <td id="T_942a8_row87_col2" class="data row87 col2" >88</td>
+      <td id="T_942a8_row87_col3" class="data row87 col3" >175</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row88_col0" class="data row88 col0" >6</td>
+      <td id="T_942a8_row88_col1" class="data row88 col1" >6</td>
+      <td id="T_942a8_row88_col2" class="data row88 col2" >89</td>
+      <td id="T_942a8_row88_col3" class="data row88 col3" >177</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row89_col0" class="data row89 col0" >15</td>
+      <td id="T_942a8_row89_col1" class="data row89 col1" >15</td>
+      <td id="T_942a8_row89_col2" class="data row89 col2" >90</td>
+      <td id="T_942a8_row89_col3" class="data row89 col3" >177</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row90_col0" class="data row90 col0" >24</td>
+      <td id="T_942a8_row90_col1" class="data row90 col1" >24</td>
+      <td id="T_942a8_row90_col2" class="data row90 col2" >91</td>
+      <td id="T_942a8_row90_col3" class="data row90 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row91_col0" class="data row91 col0" >22</td>
+      <td id="T_942a8_row91_col1" class="data row91 col1" >50</td>
+      <td id="T_942a8_row91_col2" class="data row91 col2" >92</td>
+      <td id="T_942a8_row91_col3" class="data row91 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row92_col0" class="data row92 col0" >77</td>
+      <td id="T_942a8_row92_col1" class="data row92 col1" >77</td>
+      <td id="T_942a8_row92_col2" class="data row92 col2" >93</td>
+      <td id="T_942a8_row92_col3" class="data row92 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row93_col0" class="data row93 col0" >47</td>
+      <td id="T_942a8_row93_col1" class="data row93 col1" >47</td>
+      <td id="T_942a8_row93_col2" class="data row93 col2" >94</td>
+      <td id="T_942a8_row93_col3" class="data row93 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row94_col0" class="data row94 col0" >33</td>
+      <td id="T_942a8_row94_col1" class="data row94 col1" >33</td>
+      <td id="T_942a8_row94_col2" class="data row94 col2" >95</td>
+      <td id="T_942a8_row94_col3" class="data row94 col3" >179</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row95_col0" class="data row95 col0" >27</td>
+      <td id="T_942a8_row95_col1" class="data row95 col1" >27</td>
+      <td id="T_942a8_row95_col2" class="data row95 col2" >96</td>
+      <td id="T_942a8_row95_col3" class="data row95 col3" >180</td>
+    </tr>
+    <tr>
+      <td id="T_942a8_row96_col0" class="data row96 col0" >8</td>
+      <td id="T_942a8_row96_col1" class="data row96 col1" >8</td>
+      <td id="T_942a8_row96_col2" class="data row96 col2" >97</td>
+      <td id="T_942a8_row96_col3" class="data row96 col3" >180</td>
+    </tr>
+  </tbody>
+</table></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>visualize_lineages(lineage_truth, lineage_expspeed)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<style type="text/css">
+#T_b2e74_row2_col0, #T_b2e74_row2_col1, #T_b2e74_row16_col0, #T_b2e74_row16_col1, #T_b2e74_row22_col0, #T_b2e74_row22_col1, #T_b2e74_row30_col0, #T_b2e74_row30_col1, #T_b2e74_row32_col0, #T_b2e74_row32_col1, #T_b2e74_row35_col0, #T_b2e74_row35_col1, #T_b2e74_row41_col0, #T_b2e74_row41_col1, #T_b2e74_row45_col0, #T_b2e74_row45_col1, #T_b2e74_row55_col0, #T_b2e74_row55_col1, #T_b2e74_row58_col0, #T_b2e74_row58_col1, #T_b2e74_row60_col0, #T_b2e74_row60_col1, #T_b2e74_row68_col0, #T_b2e74_row68_col1, #T_b2e74_row69_col0, #T_b2e74_row69_col1, #T_b2e74_row71_col0, #T_b2e74_row71_col1, #T_b2e74_row72_col0, #T_b2e74_row72_col1, #T_b2e74_row73_col0, #T_b2e74_row73_col1, #T_b2e74_row74_col0, #T_b2e74_row74_col1, #T_b2e74_row79_col0, #T_b2e74_row79_col1, #T_b2e74_row80_col0, #T_b2e74_row80_col1, #T_b2e74_row82_col0, #T_b2e74_row82_col1, #T_b2e74_row83_col0, #T_b2e74_row83_col1, #T_b2e74_row86_col0, #T_b2e74_row86_col1, #T_b2e74_row87_col0, #T_b2e74_row87_col1, #T_b2e74_row89_col0, #T_b2e74_row89_col1, #T_b2e74_row91_col0, #T_b2e74_row91_col1 {
+  background-color: coral;
+  color: black;
+}
+#T_b2e74_row3_col0, #T_b2e74_row3_col1, #T_b2e74_row4_col0, #T_b2e74_row4_col1, #T_b2e74_row5_col0, #T_b2e74_row5_col1, #T_b2e74_row6_col0, #T_b2e74_row6_col1, #T_b2e74_row7_col0, #T_b2e74_row7_col1, #T_b2e74_row8_col0, #T_b2e74_row8_col1, #T_b2e74_row9_col0, #T_b2e74_row9_col1, #T_b2e74_row10_col0, #T_b2e74_row10_col1, #T_b2e74_row11_col0, #T_b2e74_row11_col1, #T_b2e74_row12_col0, #T_b2e74_row12_col1, #T_b2e74_row13_col0, #T_b2e74_row13_col1, #T_b2e74_row14_col0, #T_b2e74_row14_col1, #T_b2e74_row15_col0, #T_b2e74_row15_col1, #T_b2e74_row17_col0, #T_b2e74_row17_col1, #T_b2e74_row18_col0, #T_b2e74_row18_col1, #T_b2e74_row19_col0, #T_b2e74_row19_col1, #T_b2e74_row20_col0, #T_b2e74_row20_col1, #T_b2e74_row21_col0, #T_b2e74_row21_col1, #T_b2e74_row23_col0, #T_b2e74_row23_col1, #T_b2e74_row24_col0, #T_b2e74_row24_col1, #T_b2e74_row25_col0, #T_b2e74_row25_col1, #T_b2e74_row26_col0, #T_b2e74_row26_col1, #T_b2e74_row27_col0, #T_b2e74_row27_col1, #T_b2e74_row28_col0, #T_b2e74_row28_col1, #T_b2e74_row29_col0, #T_b2e74_row29_col1, #T_b2e74_row31_col0, #T_b2e74_row31_col1, #T_b2e74_row33_col0, #T_b2e74_row33_col1, #T_b2e74_row34_col0, #T_b2e74_row34_col1, #T_b2e74_row36_col0, #T_b2e74_row36_col1, #T_b2e74_row37_col0, #T_b2e74_row37_col1, #T_b2e74_row38_col0, #T_b2e74_row38_col1, #T_b2e74_row39_col0, #T_b2e74_row39_col1, #T_b2e74_row40_col0, #T_b2e74_row40_col1, #T_b2e74_row42_col0, #T_b2e74_row42_col1, #T_b2e74_row43_col0, #T_b2e74_row43_col1, #T_b2e74_row44_col0, #T_b2e74_row44_col1, #T_b2e74_row46_col0, #T_b2e74_row46_col1, #T_b2e74_row47_col0, #T_b2e74_row47_col1, #T_b2e74_row48_col0, #T_b2e74_row48_col1, #T_b2e74_row49_col0, #T_b2e74_row49_col1, #T_b2e74_row50_col0, #T_b2e74_row50_col1, #T_b2e74_row51_col0, #T_b2e74_row51_col1, #T_b2e74_row52_col0, #T_b2e74_row52_col1, #T_b2e74_row53_col0, #T_b2e74_row53_col1, #T_b2e74_row54_col0, #T_b2e74_row54_col1, #T_b2e74_row56_col0, #T_b2e74_row56_col1, #T_b2e74_row57_col0, #T_b2e74_row57_col1, #T_b2e74_row59_col0, #T_b2e74_row59_col1, #T_b2e74_row61_col0, #T_b2e74_row61_col1, #T_b2e74_row62_col0, #T_b2e74_row62_col1, #T_b2e74_row63_col0, #T_b2e74_row63_col1, #T_b2e74_row64_col0, #T_b2e74_row64_col1, #T_b2e74_row65_col0, #T_b2e74_row65_col1, #T_b2e74_row66_col0, #T_b2e74_row66_col1, #T_b2e74_row67_col0, #T_b2e74_row67_col1, #T_b2e74_row70_col0, #T_b2e74_row70_col1, #T_b2e74_row75_col0, #T_b2e74_row75_col1, #T_b2e74_row76_col0, #T_b2e74_row76_col1, #T_b2e74_row77_col0, #T_b2e74_row77_col1, #T_b2e74_row78_col0, #T_b2e74_row78_col1, #T_b2e74_row81_col0, #T_b2e74_row81_col1, #T_b2e74_row84_col0, #T_b2e74_row84_col1, #T_b2e74_row85_col0, #T_b2e74_row85_col1, #T_b2e74_row88_col0, #T_b2e74_row88_col1, #T_b2e74_row90_col0, #T_b2e74_row90_col1, #T_b2e74_row92_col0, #T_b2e74_row92_col1, #T_b2e74_row93_col0, #T_b2e74_row93_col1, #T_b2e74_row94_col0, #T_b2e74_row94_col1 {
+  background-color: lightgreen;
+  color: black;
+}
+#T_b2e74_row95_col0, #T_b2e74_row95_col1, #T_b2e74_row96_col0, #T_b2e74_row96_col1 {
+  background-color: yellow;
+  color: black;
+}
+</style>
+<table id="T_b2e74_">
+  <thead>
+    <tr>
+      <th class="col_heading level0 col0" >ParentID (truth)</th>
+      <th class="col_heading level0 col1" >ParentID (predicted)</th>
+      <th class="col_heading level0 col2" >BudID</th>
+      <th class="col_heading level0 col3" >FrameID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_b2e74_row0_col0" class="data row0 col0" >-1</td>
+      <td id="T_b2e74_row0_col1" class="data row0 col1" >-1</td>
+      <td id="T_b2e74_row0_col2" class="data row0 col2" >1</td>
+      <td id="T_b2e74_row0_col3" class="data row0 col3" >0</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row1_col0" class="data row1 col0" >-1</td>
+      <td id="T_b2e74_row1_col1" class="data row1 col1" >-1</td>
+      <td id="T_b2e74_row1_col2" class="data row1 col2" >2</td>
+      <td id="T_b2e74_row1_col3" class="data row1 col3" >0</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row2_col0" class="data row2 col0" >1</td>
+      <td id="T_b2e74_row2_col1" class="data row2 col1" >-2</td>
+      <td id="T_b2e74_row2_col2" class="data row2 col2" >3</td>
+      <td id="T_b2e74_row2_col3" class="data row2 col3" >19</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row3_col0" class="data row3 col0" >2</td>
+      <td id="T_b2e74_row3_col1" class="data row3 col1" >2</td>
+      <td id="T_b2e74_row3_col2" class="data row3 col2" >4</td>
+      <td id="T_b2e74_row3_col3" class="data row3 col3" >20</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row4_col0" class="data row4 col0" >4</td>
+      <td id="T_b2e74_row4_col1" class="data row4 col1" >4</td>
+      <td id="T_b2e74_row4_col2" class="data row4 col2" >5</td>
+      <td id="T_b2e74_row4_col3" class="data row4 col3" >39</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row5_col0" class="data row5 col0" >2</td>
+      <td id="T_b2e74_row5_col1" class="data row5 col1" >2</td>
+      <td id="T_b2e74_row5_col2" class="data row5 col2" >6</td>
+      <td id="T_b2e74_row5_col3" class="data row5 col3" >40</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row6_col0" class="data row6 col0" >1</td>
+      <td id="T_b2e74_row6_col1" class="data row6 col1" >1</td>
+      <td id="T_b2e74_row6_col2" class="data row6 col2" >7</td>
+      <td id="T_b2e74_row6_col3" class="data row6 col3" >42</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row7_col0" class="data row7 col0" >3</td>
+      <td id="T_b2e74_row7_col1" class="data row7 col1" >3</td>
+      <td id="T_b2e74_row7_col2" class="data row7 col2" >8</td>
+      <td id="T_b2e74_row7_col3" class="data row7 col3" >60</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row8_col0" class="data row8 col0" >6</td>
+      <td id="T_b2e74_row8_col1" class="data row8 col1" >6</td>
+      <td id="T_b2e74_row8_col2" class="data row8 col2" >9</td>
+      <td id="T_b2e74_row8_col3" class="data row8 col3" >61</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row9_col0" class="data row9 col0" >2</td>
+      <td id="T_b2e74_row9_col1" class="data row9 col1" >2</td>
+      <td id="T_b2e74_row9_col2" class="data row9 col2" >10</td>
+      <td id="T_b2e74_row9_col3" class="data row9 col3" >62</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row10_col0" class="data row10 col0" >4</td>
+      <td id="T_b2e74_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_b2e74_row10_col2" class="data row10 col2" >11</td>
+      <td id="T_b2e74_row10_col3" class="data row10 col3" >63</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row11_col0" class="data row11 col0" >5</td>
+      <td id="T_b2e74_row11_col1" class="data row11 col1" >5</td>
+      <td id="T_b2e74_row11_col2" class="data row11 col2" >12</td>
+      <td id="T_b2e74_row11_col3" class="data row11 col3" >67</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row12_col0" class="data row12 col0" >6</td>
+      <td id="T_b2e74_row12_col1" class="data row12 col1" >6</td>
+      <td id="T_b2e74_row12_col2" class="data row12 col2" >13</td>
+      <td id="T_b2e74_row12_col3" class="data row12 col3" >81</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row13_col0" class="data row13 col0" >2</td>
+      <td id="T_b2e74_row13_col1" class="data row13 col1" >2</td>
+      <td id="T_b2e74_row13_col2" class="data row13 col2" >14</td>
+      <td id="T_b2e74_row13_col3" class="data row13 col3" >82</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row14_col0" class="data row14 col0" >10</td>
+      <td id="T_b2e74_row14_col1" class="data row14 col1" >10</td>
+      <td id="T_b2e74_row14_col2" class="data row14 col2" >15</td>
+      <td id="T_b2e74_row14_col3" class="data row14 col3" >84</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row15_col0" class="data row15 col0" >9</td>
+      <td id="T_b2e74_row15_col1" class="data row15 col1" >9</td>
+      <td id="T_b2e74_row15_col2" class="data row15 col2" >16</td>
+      <td id="T_b2e74_row15_col3" class="data row15 col3" >85</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row16_col0" class="data row16 col0" >4</td>
+      <td id="T_b2e74_row16_col1" class="data row16 col1" >10</td>
+      <td id="T_b2e74_row16_col2" class="data row16 col2" >17</td>
+      <td id="T_b2e74_row16_col3" class="data row16 col3" >86</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row17_col0" class="data row17 col0" >11</td>
+      <td id="T_b2e74_row17_col1" class="data row17 col1" >11</td>
+      <td id="T_b2e74_row17_col2" class="data row17 col2" >18</td>
+      <td id="T_b2e74_row17_col3" class="data row17 col3" >90</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row18_col0" class="data row18 col0" >5</td>
+      <td id="T_b2e74_row18_col1" class="data row18 col1" >5</td>
+      <td id="T_b2e74_row18_col2" class="data row18 col2" >19</td>
+      <td id="T_b2e74_row18_col3" class="data row18 col3" >91</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row19_col0" class="data row19 col0" >3</td>
+      <td id="T_b2e74_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_b2e74_row19_col2" class="data row19 col2" >20</td>
+      <td id="T_b2e74_row19_col3" class="data row19 col3" >93</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row20_col0" class="data row20 col0" >12</td>
+      <td id="T_b2e74_row20_col1" class="data row20 col1" >12</td>
+      <td id="T_b2e74_row20_col2" class="data row20 col2" >21</td>
+      <td id="T_b2e74_row20_col3" class="data row20 col3" >96</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row21_col0" class="data row21 col0" >8</td>
+      <td id="T_b2e74_row21_col1" class="data row21 col1" >8</td>
+      <td id="T_b2e74_row21_col2" class="data row21 col2" >22</td>
+      <td id="T_b2e74_row21_col3" class="data row21 col3" >96</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row22_col0" class="data row22 col0" >1</td>
+      <td id="T_b2e74_row22_col1" class="data row22 col1" >15</td>
+      <td id="T_b2e74_row22_col2" class="data row22 col2" >23</td>
+      <td id="T_b2e74_row22_col3" class="data row22 col3" >102</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row23_col0" class="data row23 col0" >7</td>
+      <td id="T_b2e74_row23_col1" class="data row23 col1" >7</td>
+      <td id="T_b2e74_row23_col2" class="data row23 col2" >24</td>
+      <td id="T_b2e74_row23_col3" class="data row23 col3" >103</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row24_col0" class="data row24 col0" >14</td>
+      <td id="T_b2e74_row24_col1" class="data row24 col1" >14</td>
+      <td id="T_b2e74_row24_col2" class="data row24 col2" >25</td>
+      <td id="T_b2e74_row24_col3" class="data row24 col3" >105</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row25_col0" class="data row25 col0" >2</td>
+      <td id="T_b2e74_row25_col1" class="data row25 col1" >2</td>
+      <td id="T_b2e74_row25_col2" class="data row25 col2" >26</td>
+      <td id="T_b2e74_row25_col3" class="data row25 col3" >106</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row26_col0" class="data row26 col0" >6</td>
+      <td id="T_b2e74_row26_col1" class="data row26 col1" >6</td>
+      <td id="T_b2e74_row26_col2" class="data row26 col2" >27</td>
+      <td id="T_b2e74_row26_col3" class="data row26 col3" >107</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row27_col0" class="data row27 col0" >10</td>
+      <td id="T_b2e74_row27_col1" class="data row27 col1" >10</td>
+      <td id="T_b2e74_row27_col2" class="data row27 col2" >28</td>
+      <td id="T_b2e74_row27_col3" class="data row27 col3" >110</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row28_col0" class="data row28 col0" >15</td>
+      <td id="T_b2e74_row28_col1" class="data row28 col1" >15</td>
+      <td id="T_b2e74_row28_col2" class="data row28 col2" >29</td>
+      <td id="T_b2e74_row28_col3" class="data row28 col3" >117</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row29_col0" class="data row29 col0" >13</td>
+      <td id="T_b2e74_row29_col1" class="data row29 col1" >13</td>
+      <td id="T_b2e74_row29_col2" class="data row29 col2" >30</td>
+      <td id="T_b2e74_row29_col3" class="data row29 col3" >117</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row30_col0" class="data row30 col0" >4</td>
+      <td id="T_b2e74_row30_col1" class="data row30 col1" >5</td>
+      <td id="T_b2e74_row30_col2" class="data row30 col2" >31</td>
+      <td id="T_b2e74_row30_col3" class="data row30 col3" >117</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row31_col0" class="data row31 col0" >20</td>
+      <td id="T_b2e74_row31_col1" class="data row31 col1" >20</td>
+      <td id="T_b2e74_row31_col2" class="data row31 col2" >32</td>
+      <td id="T_b2e74_row31_col3" class="data row31 col3" >118</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row32_col0" class="data row32 col0" >3</td>
+      <td id="T_b2e74_row32_col1" class="data row32 col1" >25</td>
+      <td id="T_b2e74_row32_col2" class="data row32 col2" >33</td>
+      <td id="T_b2e74_row32_col3" class="data row32 col3" >119</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row33_col0" class="data row33 col0" >9</td>
+      <td id="T_b2e74_row33_col1" class="data row33 col1" >9</td>
+      <td id="T_b2e74_row33_col2" class="data row33 col2" >34</td>
+      <td id="T_b2e74_row33_col3" class="data row33 col3" >120</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row34_col0" class="data row34 col0" >11</td>
+      <td id="T_b2e74_row34_col1" class="data row34 col1" >11</td>
+      <td id="T_b2e74_row34_col2" class="data row34 col2" >35</td>
+      <td id="T_b2e74_row34_col3" class="data row34 col3" >121</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row35_col0" class="data row35 col0" >26</td>
+      <td id="T_b2e74_row35_col1" class="data row35 col1" >2</td>
+      <td id="T_b2e74_row35_col2" class="data row35 col2" >36</td>
+      <td id="T_b2e74_row35_col3" class="data row35 col3" >125</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row36_col0" class="data row36 col0" >17</td>
+      <td id="T_b2e74_row36_col1" class="data row36 col1" >17</td>
+      <td id="T_b2e74_row36_col2" class="data row36 col2" >37</td>
+      <td id="T_b2e74_row36_col3" class="data row36 col3" >126</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row37_col0" class="data row37 col0" >5</td>
+      <td id="T_b2e74_row37_col1" class="data row37 col1" >5</td>
+      <td id="T_b2e74_row37_col2" class="data row37 col2" >38</td>
+      <td id="T_b2e74_row37_col3" class="data row37 col3" >128</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row38_col0" class="data row38 col0" >18</td>
+      <td id="T_b2e74_row38_col1" class="data row38 col1" >18</td>
+      <td id="T_b2e74_row38_col2" class="data row38 col2" >39</td>
+      <td id="T_b2e74_row38_col3" class="data row38 col3" >129</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row39_col0" class="data row39 col0" >2</td>
+      <td id="T_b2e74_row39_col1" class="data row39 col1" >2</td>
+      <td id="T_b2e74_row39_col2" class="data row39 col2" >40</td>
+      <td id="T_b2e74_row39_col3" class="data row39 col3" >129</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row40_col0" class="data row40 col0" >14</td>
+      <td id="T_b2e74_row40_col1" class="data row40 col1" >14</td>
+      <td id="T_b2e74_row40_col2" class="data row40 col2" >41</td>
+      <td id="T_b2e74_row40_col3" class="data row40 col3" >131</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row41_col0" class="data row41 col0" >19</td>
+      <td id="T_b2e74_row41_col1" class="data row41 col1" >21</td>
+      <td id="T_b2e74_row41_col2" class="data row41 col2" >42</td>
+      <td id="T_b2e74_row41_col3" class="data row41 col3" >133</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row42_col0" class="data row42 col0" >6</td>
+      <td id="T_b2e74_row42_col1" class="data row42 col1" >6</td>
+      <td id="T_b2e74_row42_col2" class="data row42 col2" >43</td>
+      <td id="T_b2e74_row42_col3" class="data row42 col3" >134</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row43_col0" class="data row43 col0" >27</td>
+      <td id="T_b2e74_row43_col1" class="data row43 col1" >27</td>
+      <td id="T_b2e74_row43_col2" class="data row43 col2" >44</td>
+      <td id="T_b2e74_row43_col3" class="data row43 col3" >135</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row44_col0" class="data row44 col0" >12</td>
+      <td id="T_b2e74_row44_col1" class="data row44 col1" >12</td>
+      <td id="T_b2e74_row44_col2" class="data row44 col2" >45</td>
+      <td id="T_b2e74_row44_col3" class="data row44 col3" >137</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row45_col0" class="data row45 col0" >3</td>
+      <td id="T_b2e74_row45_col1" class="data row45 col1" >41</td>
+      <td id="T_b2e74_row45_col2" class="data row45 col2" >46</td>
+      <td id="T_b2e74_row45_col3" class="data row45 col3" >141</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row46_col0" class="data row46 col0" >22</td>
+      <td id="T_b2e74_row46_col1" class="data row46 col1" >22</td>
+      <td id="T_b2e74_row46_col2" class="data row46 col2" >47</td>
+      <td id="T_b2e74_row46_col3" class="data row46 col3" >142</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row47_col0" class="data row47 col0" >15</td>
+      <td id="T_b2e74_row47_col1" class="data row47 col1" >15</td>
+      <td id="T_b2e74_row47_col2" class="data row47 col2" >48</td>
+      <td id="T_b2e74_row47_col3" class="data row47 col3" >144</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row48_col0" class="data row48 col0" >4</td>
+      <td id="T_b2e74_row48_col1" class="data row48 col1" >4</td>
+      <td id="T_b2e74_row48_col2" class="data row48 col2" >49</td>
+      <td id="T_b2e74_row48_col3" class="data row48 col3" >144</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row49_col0" class="data row49 col0" >31</td>
+      <td id="T_b2e74_row49_col1" class="data row49 col1" >31</td>
+      <td id="T_b2e74_row49_col2" class="data row49 col2" >50</td>
+      <td id="T_b2e74_row49_col3" class="data row49 col3" >145</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row50_col0" class="data row50 col0" >8</td>
+      <td id="T_b2e74_row50_col1" class="data row50 col1" >8</td>
+      <td id="T_b2e74_row50_col2" class="data row50 col2" >51</td>
+      <td id="T_b2e74_row50_col3" class="data row50 col3" >145</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row51_col0" class="data row51 col0" >1</td>
+      <td id="T_b2e74_row51_col1" class="data row51 col1" >1</td>
+      <td id="T_b2e74_row51_col2" class="data row51 col2" >52</td>
+      <td id="T_b2e74_row51_col3" class="data row51 col3" >146</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row52_col0" class="data row52 col0" >25</td>
+      <td id="T_b2e74_row52_col1" class="data row52 col1" >25</td>
+      <td id="T_b2e74_row52_col2" class="data row52 col2" >53</td>
+      <td id="T_b2e74_row52_col3" class="data row52 col3" >146</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row53_col0" class="data row53 col0" >33</td>
+      <td id="T_b2e74_row53_col1" class="data row53 col1" >33</td>
+      <td id="T_b2e74_row53_col2" class="data row53 col2" >54</td>
+      <td id="T_b2e74_row53_col3" class="data row53 col3" >147</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row54_col0" class="data row54 col0" >5</td>
+      <td id="T_b2e74_row54_col1" class="data row54 col1" >5</td>
+      <td id="T_b2e74_row54_col2" class="data row54 col2" >55</td>
+      <td id="T_b2e74_row54_col3" class="data row54 col3" >149</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row55_col0" class="data row55 col0" >11</td>
+      <td id="T_b2e74_row55_col1" class="data row55 col1" >45</td>
+      <td id="T_b2e74_row55_col2" class="data row55 col2" >56</td>
+      <td id="T_b2e74_row55_col3" class="data row55 col3" >150</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row56_col0" class="data row56 col0" >23</td>
+      <td id="T_b2e74_row56_col1" class="data row56 col1" >23</td>
+      <td id="T_b2e74_row56_col2" class="data row56 col2" >57</td>
+      <td id="T_b2e74_row56_col3" class="data row56 col3" >150</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row57_col0" class="data row57 col0" >38</td>
+      <td id="T_b2e74_row57_col1" class="data row57 col1" >38</td>
+      <td id="T_b2e74_row57_col2" class="data row57 col2" >58</td>
+      <td id="T_b2e74_row57_col3" class="data row57 col3" >151</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row58_col0" class="data row58 col0" >6</td>
+      <td id="T_b2e74_row58_col1" class="data row58 col1" >37</td>
+      <td id="T_b2e74_row58_col2" class="data row58 col2" >59</td>
+      <td id="T_b2e74_row58_col3" class="data row58 col3" >153</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row59_col0" class="data row59 col0" >10</td>
+      <td id="T_b2e74_row59_col1" class="data row59 col1" >10</td>
+      <td id="T_b2e74_row59_col2" class="data row59 col2" >60</td>
+      <td id="T_b2e74_row59_col3" class="data row59 col3" >153</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row60_col0" class="data row60 col0" >2</td>
+      <td id="T_b2e74_row60_col1" class="data row60 col1" >1</td>
+      <td id="T_b2e74_row60_col2" class="data row60 col2" >61</td>
+      <td id="T_b2e74_row60_col3" class="data row60 col3" >154</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row61_col0" class="data row61 col0" >24</td>
+      <td id="T_b2e74_row61_col1" class="data row61 col1" >24</td>
+      <td id="T_b2e74_row61_col2" class="data row61 col2" >62</td>
+      <td id="T_b2e74_row61_col3" class="data row61 col3" >155</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row62_col0" class="data row62 col0" >16</td>
+      <td id="T_b2e74_row62_col1" class="data row62 col1" >16</td>
+      <td id="T_b2e74_row62_col2" class="data row62 col2" >63</td>
+      <td id="T_b2e74_row62_col3" class="data row62 col3" >157</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row63_col0" class="data row63 col0" >20</td>
+      <td id="T_b2e74_row63_col1" class="data row63 col1" >20</td>
+      <td id="T_b2e74_row63_col2" class="data row63 col2" >64</td>
+      <td id="T_b2e74_row63_col3" class="data row63 col3" >159</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row64_col0" class="data row64 col0" >7</td>
+      <td id="T_b2e74_row64_col1" class="data row64 col1" >7</td>
+      <td id="T_b2e74_row64_col2" class="data row64 col2" >65</td>
+      <td id="T_b2e74_row64_col3" class="data row64 col3" >159</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row65_col0" class="data row65 col0" >19</td>
+      <td id="T_b2e74_row65_col1" class="data row65 col1" >19</td>
+      <td id="T_b2e74_row65_col2" class="data row65 col2" >66</td>
+      <td id="T_b2e74_row65_col3" class="data row65 col3" >159</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row66_col0" class="data row66 col0" >21</td>
+      <td id="T_b2e74_row66_col1" class="data row66 col1" >21</td>
+      <td id="T_b2e74_row66_col2" class="data row66 col2" >67</td>
+      <td id="T_b2e74_row66_col3" class="data row66 col3" >161</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row67_col0" class="data row67 col0" >42</td>
+      <td id="T_b2e74_row67_col1" class="data row67 col1" >42</td>
+      <td id="T_b2e74_row67_col2" class="data row67 col2" >68</td>
+      <td id="T_b2e74_row67_col3" class="data row67 col3" >162</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row68_col0" class="data row68 col0" >12</td>
+      <td id="T_b2e74_row68_col1" class="data row68 col1" >67</td>
+      <td id="T_b2e74_row68_col2" class="data row68 col2" >69</td>
+      <td id="T_b2e74_row68_col3" class="data row68 col3" >162</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row69_col0" class="data row69 col0" >3</td>
+      <td id="T_b2e74_row69_col1" class="data row69 col1" >33</td>
+      <td id="T_b2e74_row69_col2" class="data row69 col2" >70</td>
+      <td id="T_b2e74_row69_col3" class="data row69 col3" >162</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row70_col0" class="data row70 col0" >18</td>
+      <td id="T_b2e74_row70_col1" class="data row70 col1" >18</td>
+      <td id="T_b2e74_row70_col2" class="data row70 col2" >71</td>
+      <td id="T_b2e74_row70_col3" class="data row70 col3" >163</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row71_col0" class="data row71 col0" >9</td>
+      <td id="T_b2e74_row71_col1" class="data row71 col1" >34</td>
+      <td id="T_b2e74_row71_col2" class="data row71 col2" >72</td>
+      <td id="T_b2e74_row71_col3" class="data row71 col3" >163</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row72_col0" class="data row72 col0" >32</td>
+      <td id="T_b2e74_row72_col1" class="data row72 col1" >53</td>
+      <td id="T_b2e74_row72_col2" class="data row72 col2" >73</td>
+      <td id="T_b2e74_row72_col3" class="data row72 col3" >163</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row73_col0" class="data row73 col0" >43</td>
+      <td id="T_b2e74_row73_col1" class="data row73 col1" >10</td>
+      <td id="T_b2e74_row73_col2" class="data row73 col2" >74</td>
+      <td id="T_b2e74_row73_col3" class="data row73 col3" >164</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row74_col0" class="data row74 col0" >26</td>
+      <td id="T_b2e74_row74_col1" class="data row74 col1" >22</td>
+      <td id="T_b2e74_row74_col2" class="data row74 col2" >75</td>
+      <td id="T_b2e74_row74_col3" class="data row74 col3" >164</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row75_col0" class="data row75 col0" >13</td>
+      <td id="T_b2e74_row75_col1" class="data row75 col1" >13</td>
+      <td id="T_b2e74_row75_col2" class="data row75 col2" >76</td>
+      <td id="T_b2e74_row75_col3" class="data row75 col3" >167</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row76_col0" class="data row76 col0" >-2</td>
+      <td id="T_b2e74_row76_col1" class="data row76 col1" >-2</td>
+      <td id="T_b2e74_row76_col2" class="data row76 col2" >77</td>
+      <td id="T_b2e74_row76_col3" class="data row76 col3" >167</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row77_col0" class="data row77 col0" >46</td>
+      <td id="T_b2e74_row77_col1" class="data row77 col1" >46</td>
+      <td id="T_b2e74_row77_col2" class="data row77 col2" >78</td>
+      <td id="T_b2e74_row77_col3" class="data row77 col3" >167</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row78_col0" class="data row78 col0" >23</td>
+      <td id="T_b2e74_row78_col1" class="data row78 col1" >23</td>
+      <td id="T_b2e74_row78_col2" class="data row78 col2" >79</td>
+      <td id="T_b2e74_row78_col3" class="data row78 col3" >168</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row79_col0" class="data row79 col0" >4</td>
+      <td id="T_b2e74_row79_col1" class="data row79 col1" >45</td>
+      <td id="T_b2e74_row79_col2" class="data row79 col2" >80</td>
+      <td id="T_b2e74_row79_col3" class="data row79 col3" >168</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row80_col0" class="data row80 col0" >45</td>
+      <td id="T_b2e74_row80_col1" class="data row80 col1" >4</td>
+      <td id="T_b2e74_row80_col2" class="data row80 col2" >81</td>
+      <td id="T_b2e74_row80_col3" class="data row80 col3" >169</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row81_col0" class="data row81 col0" >5</td>
+      <td id="T_b2e74_row81_col1" class="data row81 col1" >5</td>
+      <td id="T_b2e74_row81_col2" class="data row81 col2" >82</td>
+      <td id="T_b2e74_row81_col3" class="data row81 col3" >170</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row82_col0" class="data row82 col0" >36</td>
+      <td id="T_b2e74_row82_col1" class="data row82 col1" >14</td>
+      <td id="T_b2e74_row82_col2" class="data row82 col2" >83</td>
+      <td id="T_b2e74_row82_col3" class="data row82 col3" >170</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row83_col0" class="data row83 col0" >28</td>
+      <td id="T_b2e74_row83_col1" class="data row83 col1" >17</td>
+      <td id="T_b2e74_row83_col2" class="data row83 col2" >84</td>
+      <td id="T_b2e74_row83_col3" class="data row83 col3" >171</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row84_col0" class="data row84 col0" >25</td>
+      <td id="T_b2e74_row84_col1" class="data row84 col1" >25</td>
+      <td id="T_b2e74_row84_col2" class="data row84 col2" >85</td>
+      <td id="T_b2e74_row84_col3" class="data row84 col3" >173</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row85_col0" class="data row85 col0" >55</td>
+      <td id="T_b2e74_row85_col1" class="data row85 col1" >55</td>
+      <td id="T_b2e74_row85_col2" class="data row85 col2" >86</td>
+      <td id="T_b2e74_row85_col3" class="data row85 col3" >174</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row86_col0" class="data row86 col0" >37</td>
+      <td id="T_b2e74_row86_col1" class="data row86 col1" >59</td>
+      <td id="T_b2e74_row86_col2" class="data row86 col2" >87</td>
+      <td id="T_b2e74_row86_col3" class="data row86 col3" >175</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row87_col0" class="data row87 col0" >49</td>
+      <td id="T_b2e74_row87_col1" class="data row87 col1" >47</td>
+      <td id="T_b2e74_row87_col2" class="data row87 col2" >88</td>
+      <td id="T_b2e74_row87_col3" class="data row87 col3" >175</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row88_col0" class="data row88 col0" >6</td>
+      <td id="T_b2e74_row88_col1" class="data row88 col1" >6</td>
+      <td id="T_b2e74_row88_col2" class="data row88 col2" >89</td>
+      <td id="T_b2e74_row88_col3" class="data row88 col3" >177</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row89_col0" class="data row89 col0" >15</td>
+      <td id="T_b2e74_row89_col1" class="data row89 col1" >74</td>
+      <td id="T_b2e74_row89_col2" class="data row89 col2" >90</td>
+      <td id="T_b2e74_row89_col3" class="data row89 col3" >177</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row90_col0" class="data row90 col0" >24</td>
+      <td id="T_b2e74_row90_col1" class="data row90 col1" >24</td>
+      <td id="T_b2e74_row90_col2" class="data row90 col2" >91</td>
+      <td id="T_b2e74_row90_col3" class="data row90 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row91_col0" class="data row91 col0" >22</td>
+      <td id="T_b2e74_row91_col1" class="data row91 col1" >50</td>
+      <td id="T_b2e74_row91_col2" class="data row91 col2" >92</td>
+      <td id="T_b2e74_row91_col3" class="data row91 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row92_col0" class="data row92 col0" >77</td>
+      <td id="T_b2e74_row92_col1" class="data row92 col1" >77</td>
+      <td id="T_b2e74_row92_col2" class="data row92 col2" >93</td>
+      <td id="T_b2e74_row92_col3" class="data row92 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row93_col0" class="data row93 col0" >47</td>
+      <td id="T_b2e74_row93_col1" class="data row93 col1" >47</td>
+      <td id="T_b2e74_row93_col2" class="data row93 col2" >94</td>
+      <td id="T_b2e74_row93_col3" class="data row93 col3" >178</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row94_col0" class="data row94 col0" >33</td>
+      <td id="T_b2e74_row94_col1" class="data row94 col1" >33</td>
+      <td id="T_b2e74_row94_col2" class="data row94 col2" >95</td>
+      <td id="T_b2e74_row94_col3" class="data row94 col3" >179</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row95_col0" class="data row95 col0" >27</td>
+      <td id="T_b2e74_row95_col1" class="data row95 col1" >-3</td>
+      <td id="T_b2e74_row95_col2" class="data row95 col2" >96</td>
+      <td id="T_b2e74_row95_col3" class="data row95 col3" >180</td>
+    </tr>
+    <tr>
+      <td id="T_b2e74_row96_col0" class="data row96 col0" >8</td>
+      <td id="T_b2e74_row96_col1" class="data row96 col1" >-3</td>
+      <td id="T_b2e74_row96_col2" class="data row96 col2" >97</td>
+      <td id="T_b2e74_row96_col3" class="data row96 col3" >180</td>
+    </tr>
+  </tbody>
+</table></div>
+</div>
+</div>
+<div class="section" id="Saving-predicted-lineages">
+<h2>Saving predicted lineages<a class="headerlink" href="#Saving-predicted-lineages" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>lineage_expspeed.save_csv(&#39;outputs/colony003_lineage_expspeed.csv&#39;)
+lineage_budlum.save_csv(&#39;outputs/colony003_lineage_budlum.csv&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="accuracies.html" class="btn btn-neutral float-right" title="Evaluate accuracy of the different algorithms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, G. BRENNA, F. MASSARD, N. VADOT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLI example &mdash; bread  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api.html" />
+    <link rel="prev" title="Evaluate accuracy of the different algorithms" href="lineage/accuracies.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> bread
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html"><code class="docutils literal notranslate"><span class="pre">bread</span></code> – determining lineage of budding yeast cells</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lineage/demo.html">Lineage guesser demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineage/accuracies.html">Evaluate accuracy of the different algorithms</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CLI example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">bread</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Examples</a> &raquo;</li>
+      <li>CLI example</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/cli.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="cli-example">
+<h1>CLI example<a class="headerlink" href="#cli-example" title="Permalink to this headline"></a></h1>
+<p>The CLI exposes the four implemented algorithms :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -m bread.cli --help
+usage: bread.cli [-h] --output-file OUTPUT_FILE
+                 {budneck,expspeed,mintheta,mindist} ...
+
+Lineage guesser for budding yeast cells.
+
+positional arguments:
+  {budneck,expspeed,mintheta,mindist}
+    budneck             Guess lineage relations by looking at the budneck
+                        marker intensity along the contour of the bud.
+    expspeed            Guess lineage relations by maximizing the expansion
+                        velocity of the bud with respect to the candidate
+                        parent.
+    mintheta            Guess lineage relations by minimizing the angle
+                        between the major axis of the candidates and
+                        candidate-to-bud vector.
+    mindist             Guess lineage relations by finding the cell closest to
+                        the bud, when it appears on the segmentation.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --output-file OUTPUT_FILE
+                        Path to output file (csv format) (default: None)
+</pre></div>
+</div>
+<p>Each algorithm is documented :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">bread</span><span class="o">.</span><span class="n">cli</span> <span class="n">budneck</span> <span class="o">--</span><span class="n">help</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">bread</span><span class="o">.</span><span class="n">cli</span> <span class="n">budneck</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">budneck</span><span class="o">-</span><span class="n">file</span> <span class="n">BUDNECK_FILE</span> <span class="o">--</span><span class="n">segmentation</span><span class="o">-</span><span class="n">file</span>
+                         <span class="n">SEGMENTATION_FILE</span> <span class="p">[</span><span class="o">--</span><span class="n">nn_threshold</span> <span class="n">NN_THRESHOLD</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">flexible_nn_threshold</span> <span class="n">FLEXIBLE_NN_THRESHOLD</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">num_frames_refractory</span> <span class="n">NUM_FRAMES_REFRACTORY</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">num_frames</span> <span class="n">NUM_FRAMES</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">offset_frames</span> <span class="n">OFFSET_FRAMES</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">kernel_N</span> <span class="n">KERNEL_N</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">kernel_sigma</span> <span class="n">KERNEL_SIGMA</span><span class="p">]</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">--</span><span class="n">budneck</span><span class="o">-</span><span class="n">file</span> <span class="n">BUDNECK_FILE</span>
+                        <span class="n">Path</span> <span class="n">to</span> <span class="n">file</span> <span class="n">containing</span> <span class="n">budneck</span> <span class="n">marker</span><span class="o">.</span> <span class="n">Supported</span> <span class="n">file</span>
+                        <span class="n">types</span> <span class="p">:</span> <span class="n">tiff</span> <span class="p">(</span><span class="k">as</span> <span class="n">exported</span> <span class="n">by</span> <span class="n">Fiji</span><span class="p">)</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">segmentation</span><span class="o">-</span><span class="n">file</span> <span class="n">SEGMENTATION_FILE</span>
+                        <span class="n">Path</span> <span class="n">to</span> <span class="n">segmentation</span> <span class="n">file</span><span class="o">.</span> <span class="n">Supported</span> <span class="n">file</span> <span class="n">types</span> <span class="p">:</span> <span class="n">hd5</span>
+                        <span class="p">(</span><span class="k">as</span> <span class="n">exported</span> <span class="n">by</span> <span class="n">YeaZ</span><span class="p">)</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">nn_threshold</span> <span class="n">NN_THRESHOLD</span>
+                        <span class="n">Cell</span> <span class="n">masks</span> <span class="n">separated</span> <span class="n">by</span> <span class="n">less</span> <span class="n">than</span> <span class="n">this</span> <span class="n">threshold</span> <span class="n">are</span>
+                        <span class="n">considered</span> <span class="n">neighbours</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">8</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">flexible_nn_threshold</span> <span class="n">FLEXIBLE_NN_THRESHOLD</span>
+                        <span class="n">If</span> <span class="n">no</span> <span class="n">nearest</span> <span class="n">neighbours</span> <span class="n">are</span> <span class="n">found</span> <span class="n">within</span> <span class="n">the</span> <span class="n">given</span>
+                        <span class="n">threshold</span><span class="p">,</span> <span class="k">try</span> <span class="n">to</span> <span class="n">find</span> <span class="n">the</span> <span class="n">closest</span> <span class="n">one</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span>
+                        <span class="kc">False</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">num_frames_refractory</span> <span class="n">NUM_FRAMES_REFRACTORY</span>
+                        <span class="n">After</span> <span class="n">a</span> <span class="n">parent</span> <span class="n">cell</span> <span class="n">has</span> <span class="n">budded</span><span class="p">,</span> <span class="n">exclude</span> <span class="n">it</span> <span class="kn">from</span> <span class="nn">the</span>
+                        <span class="n">parent</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">frames</span><span class="o">.</span> <span class="n">It</span> <span class="ow">is</span> <span class="n">recommended</span> <span class="n">to</span>
+                        <span class="nb">set</span> <span class="n">it</span> <span class="n">to</span> <span class="n">a</span> <span class="n">low</span> <span class="n">estimate</span><span class="p">,</span> <span class="k">as</span> <span class="n">high</span> <span class="n">values</span> <span class="n">will</span> <span class="n">cause</span>
+                        <span class="n">mistakes</span> <span class="n">to</span> <span class="n">propagate</span> <span class="ow">in</span> <span class="n">time</span><span class="o">.</span> <span class="n">A</span> <span class="n">value</span> <span class="n">of</span> <span class="mi">0</span>
+                        <span class="n">corresponds</span> <span class="n">to</span> <span class="n">no</span> <span class="n">refractory</span> <span class="n">period</span><span class="o">.</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">num_frames</span> <span class="n">NUM_FRAMES</span>
+                        <span class="n">Number</span> <span class="n">of</span> <span class="n">frames</span> <span class="n">to</span> <span class="n">make</span> <span class="n">guesses</span> <span class="k">for</span> <span class="n">after</span> <span class="n">the</span> <span class="n">bud</span> <span class="n">has</span>
+                        <span class="n">appeared</span><span class="o">.</span> <span class="n">The</span> <span class="n">algorithm</span> <span class="n">makes</span> <span class="n">a</span> <span class="n">guess</span> <span class="k">for</span> <span class="n">each</span> <span class="n">frame</span><span class="p">,</span>
+                        <span class="n">then</span> <span class="n">predicts</span> <span class="n">a</span> <span class="n">parent</span> <span class="n">by</span> <span class="n">majority</span><span class="o">-</span><span class="n">vote</span> <span class="n">policy</span>
+                        <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">offset_frames</span> <span class="n">OFFSET_FRAMES</span>
+                        <span class="n">Wait</span> <span class="n">this</span> <span class="n">number</span> <span class="n">of</span> <span class="n">frames</span> <span class="n">after</span> <span class="n">bud</span> <span class="n">appears</span> <span class="n">before</span>
+                        <span class="n">guessing</span> <span class="n">parent</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">kernel_N</span> <span class="n">KERNEL_N</span>   <span class="n">Size</span> <span class="n">of</span> <span class="n">the</span> <span class="n">gaussian</span> <span class="n">smoothing</span> <span class="n">kernel</span> <span class="ow">in</span> <span class="n">pixels</span><span class="o">.</span>
+                        <span class="n">larger</span> <span class="n">means</span> <span class="n">smoother</span> <span class="n">intensity</span> <span class="n">curves</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">30</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">kernel_sigma</span> <span class="n">KERNEL_SIGMA</span>
+                        <span class="n">Number</span> <span class="n">of</span> <span class="n">standard</span> <span class="n">deviations</span> <span class="n">to</span> <span class="n">consider</span> <span class="k">for</span> <span class="n">the</span>
+                        <span class="n">smoothing</span> <span class="n">kernel</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example of running the budneck algorithm :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -m bread.cli --output-file &#39;colony_001 budneck.csv&#39; budneck --budneck-file data/colony001_GFP.tif --segmentation-file data/colony001_segmentation.h5
+INFO:bread.cli:Loading segmentation...
+INFO:bread.cli:Loaded segmentation Segmentation(num_frames=181, frame_height=650, frame_width=650)
+INFO:bread.cli:Loading budneck channel movie...
+INFO:bread.cli:Loaded budneck channel movie Microscopy(num_frames=181, frame_height=650, frame_width=650)
+INFO:bread.cli:Loading guesser...
+INFO:bread.cli:Loaded guesser LineageGuesserBudLum(budneck_img=Microscopy(num_frames=181, frame_height=650, frame_width=650), segmentation=Segmentation(num_frames=181, frame_height=650, frame_width=650), nn_threshold=8, flexible_nn_threshold=False, num_frames_refractory=0, num_frames=5, offset_frames=0, kernel_N=30, kernel_sigma=1)
+INFO:bread.cli:Running guesser...
+bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #80 at frame #178), requested 5, but only 3 remaining.
+bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #81 at frame #178), requested 5, but only 3 remaining.
+bread/algo/lineage/_lineage.py:282: NotEnoughFramesWarning: Not enough frames in the movie (bud #82 at frame #179), requested 5, but only 2 remaining.
+INFO:bread.cli:Saving lineage...
+
+$ head colony_001\ budneck.csv
+# parent_id,bud_id,time_index
+-1,1,0
+-1,2,0
+2,3,4
+1,4,7
+4,5,27
+1,6,27
+2,7,28
+3,8,35
+4,9,51
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lineage/accuracies.html" class="btn btn-neutral float-left" title="Evaluate accuracy of the different algorithms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, G. BRENNA, F. MASSARD, N. VADOT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

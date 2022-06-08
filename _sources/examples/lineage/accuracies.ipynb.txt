@@ -1,0 +1,232 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Evaluate accuracy of the different algorithms"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%load_ext autoreload\n",
+    "%autoreload 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from bread.algo.lineage import LineageGuesserBudLum, LineageGuesserExpansionSpeed, LineageGuesserMinDistance, LineageGuesserMinTheta, accuracy\n",
+    "from bread.data import Lineage, Segmentation, Microscopy, BreadWarning\n",
+    "from glob import glob\n",
+    "import warnings\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "computing acc colony 1\n",
+      "[----]\n",
+      "computing acc colony 2\n",
+      "[----]\n",
+      "computing acc colony 3\n",
+      "[----]\n",
+      "computing acc colony 4\n",
+      "[----]\n",
+      "computing acc colony 5\n",
+      "[----]\n"
+     ]
+    }
+   ],
+   "source": [
+    "accs = {'BudLum': [], 'ExpansionSpeed': [], 'MinTheta': [], 'MinDistance': []}\n",
+    "colony_ids = [1, 2, 3, 4, 5]\n",
+    "\n",
+    "warnings.simplefilter('ignore', BreadWarning)\n",
+    "\n",
+    "for colony_id in colony_ids:\n",
+    "\tprint(f'computing acc colony {colony_id}')\n",
+    "\tseg = Segmentation.from_h5(f'../data/colony{colony_id:03d}_segmentation.h5')\n",
+    "\tgfp = Microscopy.from_tiff(f'../data/colony{colony_id:03d}_GFP.tif')\n",
+    "\tlin_truth = Lineage.from_csv(f'../data/colony{colony_id:03d}_lineage.csv')\n",
+    "\n",
+    "\tprint('[', end='')\n",
+    "\tlin_pred_budlum = LineageGuesserBudLum(budneck_img=gfp, segmentation=seg).guess_lineage()\n",
+    "\tprint('-', end='')\n",
+    "\tlin_pred_expspeed = LineageGuesserExpansionSpeed(segmentation=seg).guess_lineage()\n",
+    "\tprint('-', end='')\n",
+    "\tlin_pred_mintheta = LineageGuesserMinTheta(segmentation=seg).guess_lineage()\n",
+    "\tprint('-', end='')\n",
+    "\tlin_pred_mindist = LineageGuesserMinDistance(segmentation=seg).guess_lineage()\n",
+    "\tprint('-]')\n",
+    "\n",
+    "\taccs['BudLum'].append(accuracy(lin_truth, lin_pred_budlum, strict=False))\n",
+    "\taccs['ExpansionSpeed'].append(accuracy(lin_truth, lin_pred_expspeed, strict=False))\n",
+    "\taccs['MinTheta'].append(accuracy(lin_truth, lin_pred_mintheta, strict=False))\n",
+    "\taccs['MinDistance'].append(accuracy(lin_truth, lin_pred_mindist, strict=False))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "accs_df = pd.DataFrame(accs, [f'colony {i}' for i in colony_ids], accs.keys())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>BudLum</th>\n",
+       "      <th>ExpansionSpeed</th>\n",
+       "      <th>MinTheta</th>\n",
+       "      <th>MinDistance</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>colony 1</th>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>0.750000</td>\n",
+       "      <td>0.800000</td>\n",
+       "      <td>0.762500</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>colony 2</th>\n",
+       "      <td>0.993243</td>\n",
+       "      <td>0.806897</td>\n",
+       "      <td>0.736486</td>\n",
+       "      <td>0.743243</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>colony 3</th>\n",
+       "      <td>0.989474</td>\n",
+       "      <td>0.731183</td>\n",
+       "      <td>0.684211</td>\n",
+       "      <td>0.610526</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>colony 4</th>\n",
+       "      <td>0.968000</td>\n",
+       "      <td>0.650000</td>\n",
+       "      <td>0.592000</td>\n",
+       "      <td>0.656000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>colony 5</th>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>0.805556</td>\n",
+       "      <td>0.694444</td>\n",
+       "      <td>0.777778</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            BudLum  ExpansionSpeed  MinTheta  MinDistance\n",
+       "colony 1  1.000000        0.750000  0.800000     0.762500\n",
+       "colony 2  0.993243        0.806897  0.736486     0.743243\n",
+       "colony 3  0.989474        0.731183  0.684211     0.610526\n",
+       "colony 4  0.968000        0.650000  0.592000     0.656000\n",
+       "colony 5  1.000000        0.805556  0.694444     0.777778"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "accs_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "BudLum            0.990143\n",
+       "ExpansionSpeed    0.748727\n",
+       "MinTheta          0.701428\n",
+       "MinDistance       0.710009\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "accs_df.mean()"
+   ]
+  }
+ ],
+ "metadata": {
+  "interpreter": {
+   "hash": "3f650ce59a8020222315dcbeb7bfe125b5629002fb045d011835e5d506ecf3fc"
+  },
+  "kernelspec": {
+   "display_name": "Python 3.7.13 ('lpbs_bread')",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.13"
+  },
+  "orig_nbformat": 4
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

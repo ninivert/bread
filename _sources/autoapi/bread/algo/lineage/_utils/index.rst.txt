@@ -1,0 +1,26 @@
+:orphan:
+
+:py:mod:`bread.algo.lineage._utils`
+===================================
+
+.. py:module:: bread.algo.lineage._utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   bread.algo.lineage._utils.extend_budding_event
+
+
+
+.. py:function:: extend_budding_event(lineage: bread.data.Lineage, time_index_num, time_index_max=None)
+
+   add extra time to a budding event from a lineage, for a total of time_index_num frames
+
+

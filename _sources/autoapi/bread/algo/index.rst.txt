@@ -1,0 +1,15 @@
+:py:mod:`bread.algo`
+====================
+
+.. py:module:: bread.algo
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   lineage/index.rst
+
+

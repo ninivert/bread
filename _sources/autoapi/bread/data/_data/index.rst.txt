@@ -1,0 +1,297 @@
+:orphan:
+
+:py:mod:`bread.data._data`
+==========================
+
+.. py:module:: bread.data._data
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   bread.data._data.Lineage
+   bread.data._data.Microscopy
+   bread.data._data.Segmentation
+   bread.data._data.Contour
+   bread.data._data.Ellipse
+
+
+
+
+.. py:class:: Lineage
+
+   Store lineage relations for cells in a movie.
+
+   .. py:class:: SpecialParentIDs
+
+      Bases: :py:obj:`enum.IntEnum`
+
+      Special parent IDs attributed in lineages to specify exceptions.
+
+      .. attribute:: PARENT_OF_ROOT
+
+         parent of a cell that already exists in first frame of colony
+
+         :type: int = -1
+
+      .. attribute:: PARENT_OF_EXTERNAL
+
+         parent of a cell that does not belong to the colony
+
+         :type: int = -2
+
+      .. attribute:: NO_GUESS
+
+         parent of cell for which the algorithm failed to guess
+
+         :type: int = -3
+
+      .. py:attribute:: PARENT_OF_ROOT
+         :annotation: :int
+
+         parent of a cell that already exists in first frame of colony
+
+      .. py:attribute:: PARENT_OF_EXTERNAL
+         :annotation: :int
+
+         parent of a cell that does not belong to the colony
+
+      .. py:attribute:: NO_GUESS
+         :annotation: :int
+
+         parent of cell for which the algorithm failed to guess
+
+
+   .. py:attribute:: parent_ids
+      :annotation: :numpy.ndarray
+
+      
+
+   .. py:attribute:: bud_ids
+      :annotation: :numpy.ndarray
+
+      
+
+   .. py:attribute:: time_ids
+      :annotation: :numpy.ndarray
+
+      
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: save_csv(self, filepath: pathlib.Path)
+
+
+   .. py:method:: from_csv(filepath: pathlib.Path) -> Lineage
+      :staticmethod:
+
+
+
+.. py:class:: Microscopy
+
+   Store a raw microscopy movie.
+
+   data : numpy.ndarray (shape=(T, W, H))
+           T : number of timeframes
+           W, H : shape of the images
+
+   .. py:attribute:: data
+      :annotation: :numpy.ndarray
+
+      
+
+   .. py:method:: __getitem__(self, index)
+
+
+   .. py:method:: __len__(self)
+
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: __repr__(self) -> str
+
+      Return repr(self).
+
+
+   .. py:method:: from_tiff(filepath: pathlib.Path) -> Microscopy
+      :staticmethod:
+
+
+   .. py:method:: from_npzs(filepaths: Union[pathlib.Path, List[pathlib.Path]]) -> Microscopy
+      :staticmethod:
+
+      Loads a microscopy movie from a list `.npz` files. Each `.npz` file stores one 2D array, corresponding to a frame.
+
+      :param filepaths: Paths to the `.npz` files. If only a `Path` is given, assumes one frame in movie.
+      :type filepaths: Union[Path, list[Path]]
+
+      :rtype: Microscopy
+
+
+
+.. py:class:: Segmentation
+
+   Store a segmentation movie.
+
+   Each image stores ids corresponding to the mask of the corresponding cell.
+
+   data : numpy.ndarray (shape=(T, W, H))
+           T : number of timeframes
+           W, H : shape of the images
+
+   .. py:attribute:: data
+      :annotation: :numpy.ndarray
+
+      
+
+   .. py:method:: __getitem__(self, index)
+
+
+   .. py:method:: __len__(self)
+
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: __repr__(self) -> str
+
+      Return repr(self).
+
+
+   .. py:method:: cell_ids(self, time_id: Optional[int] = None, background_id: Optional[int] = 0) -> numpy.ndarray
+
+      Returns cell ids from a segmentation
+
+      :param time_id: frame index in the movie. If None, returns all the cellids encountered in the movie
+      :type time_id: int or None, optional
+      :param background_id: if not None, remove id `background_id` from the cell ids
+      :type background_id: int or None, optional
+
+      :returns: cell ids contained in the segmentation
+      :rtype: array-like of int
+
+
+   .. py:method:: cms(self, time_id: int, cell_ids: Optional[List[int]] = None) -> numpy.ndarray
+
+      Returns centers of mass of cells in a segmentation
+
+      :param time_id: Frame index in the movie
+      :type time_id: int
+      :param cell_ids: List of cell ids for which to compute the centers of mass, by default None.
+                       If ``None``, ``cell_ids`` becomes all the cells in the frame
+      :type cell_ids: List[int]
+
+      :returns: coordinates of the centers of mass of each cell
+      :rtype: array-like of shape (ncells, 2)
+
+
+   .. py:method:: find_buds(self) -> Lineage
+
+      Return IDs of newly created cells
+
+      :returns: **lineage** -- initialized lineage, with nan parent ids
+      :rtype: Lineage
+
+
+   .. py:method:: from_h5(filepath: pathlib.Path, fov='FOV0') -> Segmentation
+      :staticmethod:
+
+
+   .. py:method:: from_npzs(filepaths: Union[pathlib.Path, List[pathlib.Path]]) -> Segmentation
+      :staticmethod:
+
+      Loads a segmentation movie from a list `.npz` files. Each `.npz` file stores one 2D array, corresponding to a frame.
+
+      :param filepaths: Paths to the `.npz` files. If only a `Path` is given, assumes one frame in movie.
+      :type filepaths: Union[Path, list[Path]]
+
+      :rtype: Segmentation
+
+
+
+.. py:class:: Contour
+
+   Stores indices of the contour of the cell
+
+   data : numpy.ndarray (shape=(N, 2))
+           Stores a list of (x, y) points corresponding to indices of the contour.
+           Warning : images are indexes as `img[y, x]`, so use `img[contour[:, 1], contour[:, 0]]`
+
+   .. py:attribute:: data
+      :annotation: :numpy.ndarray
+
+      
+
+   .. py:method:: __getitem__(self, index)
+
+
+   .. py:method:: __len__(self)
+
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: __repr__(self) -> str
+
+      Return repr(self).
+
+
+   .. py:method:: from_segmentation(seg: Segmentation, cell_id: int, time_id: int) -> Contour
+      :staticmethod:
+
+      Return the contour of a cell at a frame in the segmentation
+
+      :param seg:
+      :type seg: Segmentation
+      :param cell_id:
+      :type cell_id: int
+      :param time_id:
+      :type time_id: int
+
+      :rtype: Contour
+
+      :raises Contour.InvalidContourException: Raised if the cell mask is invalid (often too small or disjointed)
+
+
+
+.. py:class:: Ellipse
+
+   Store properties of an ellipse.
+
+   .. py:attribute:: x
+      :annotation: :float
+
+      
+
+   .. py:attribute:: y
+      :annotation: :float
+
+      
+
+   .. py:attribute:: r_maj
+      :annotation: :float
+
+      
+
+   .. py:attribute:: r_min
+      :annotation: :float
+
+      
+
+   .. py:attribute:: angle
+      :annotation: :float
+
+      
+
+   .. py:method:: from_contour(contour: Contour)
+      :staticmethod:
+
+
+

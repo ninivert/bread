@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`bread.data._utils`
+===========================
+
+.. py:module:: bread.data._utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   bread.data._utils.dump_npz
+   bread.data._utils.load_npz
+
+
+
+.. py:function:: dump_npz(filepath, data: dict, force=False, dry=False, compress=True)
+
+   Dumps data to disk in .npz format
+
+   :param filepath: filepath of the .npz file
+   :type filepath: str
+   :param data: data to dump. each item of the dict should be an array-like
+   :type data: dict
+   :param force: allow overriding files. Defaults to False
+   :type force: bool, optional
+   :param dry: whether to actually write data. Defaults to False
+   :type dry: bool, optional
+   :param compress: whether to compress the data. Defaults to True
+   :type compress: bool, optional
+
+
+.. py:function:: load_npz(filepath: Union[str, List[str]], key=None, autoflatten=True)
+
+

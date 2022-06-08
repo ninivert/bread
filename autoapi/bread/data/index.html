@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bread.data &mdash; bread  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="bread.algo.lineage" href="../algo/lineage/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> bread
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html"><code class="docutils literal notranslate"><span class="pre">bread</span></code> – determining lineage of budding yeast cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">bread</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../api.html">API Reference</a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">bread.data</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/bread/data/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-bread.data">
+<span id="bread-data"></span><h1><a class="reference internal" href="#module-bread.data" title="bread.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bread.data</span></code></a><a class="headerlink" href="#module-bread.data" title="Permalink to this headline"></a></h1>
+<div class="section" id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline"></a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.data.Lineage" title="bread.data.Lineage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Lineage</span></code></a></p></td>
+<td><p>Store lineage relations for cells in a movie.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bread.data.Microscopy" title="bread.data.Microscopy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Microscopy</span></code></a></p></td>
+<td><p>Store a raw microscopy movie.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.data.Segmentation" title="bread.data.Segmentation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Segmentation</span></code></a></p></td>
+<td><p>Store a segmentation movie.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bread.data.Contour" title="bread.data.Contour"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Contour</span></code></a></p></td>
+<td><p>Stores indices of the contour of the cell</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.data.Ellipse" title="bread.data.Ellipse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ellipse</span></code></a></p></td>
+<td><p>Store properties of an ellipse.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.data.dump_npz" title="bread.data.dump_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump_npz</span></code></a>(filepath, data: dict, force=False, dry=False, compress=True)</p></td>
+<td><p>Dumps data to disk in .npz format</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bread.data.load_npz" title="bread.data.load_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_npz</span></code></a>(filepath: Union[str, List[str]], key=None, autoflatten=True)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="bread.data.dump_npz">
+<span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">dump_npz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.dump_npz" title="Permalink to this definition"></a></dt>
+<dd><p>Dumps data to disk in .npz format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – filepath of the .npz file</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – data to dump. each item of the dict should be an array-like</p></li>
+<li><p><strong>force</strong> (<em>bool</em><em>, </em><em>optional</em>) – allow overriding files. Defaults to False</p></li>
+<li><p><strong>dry</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to actually write data. Defaults to False</p></li>
+<li><p><strong>compress</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to compress the data. Defaults to True</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bread.data.load_npz">
+<span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">load_npz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflatten</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.load_npz" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.data.Lineage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">Lineage</span></span><a class="headerlink" href="#bread.data.Lineage" title="Permalink to this definition"></a></dt>
+<dd><p>Store lineage relations for cells in a movie.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.data.Lineage.SpecialParentIDs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SpecialParentIDs</span></span><a class="headerlink" href="#bread.data.Lineage.SpecialParentIDs" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></p>
+<p>Special parent IDs attributed in lineages to specify exceptions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Lineage.SpecialParentIDs.PARENT_OF_ROOT">
+<span class="sig-name descname"><span class="pre">PARENT_OF_ROOT</span></span><a class="headerlink" href="#bread.data.Lineage.SpecialParentIDs.PARENT_OF_ROOT" title="Permalink to this definition"></a></dt>
+<dd><p>parent of a cell that already exists in first frame of colony</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = -1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Lineage.SpecialParentIDs.PARENT_OF_EXTERNAL">
+<span class="sig-name descname"><span class="pre">PARENT_OF_EXTERNAL</span></span><a class="headerlink" href="#bread.data.Lineage.SpecialParentIDs.PARENT_OF_EXTERNAL" title="Permalink to this definition"></a></dt>
+<dd><p>parent of a cell that does not belong to the colony</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = -2</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Lineage.SpecialParentIDs.NO_GUESS">
+<span class="sig-name descname"><span class="pre">NO_GUESS</span></span><a class="headerlink" href="#bread.data.Lineage.SpecialParentIDs.NO_GUESS" title="Permalink to this definition"></a></dt>
+<dd><p>parent of cell for which the algorithm failed to guess</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = -3</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">PARENT_OF_ROOT</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span></em><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>parent of a cell that already exists in first frame of colony</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">PARENT_OF_EXTERNAL</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span></em><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dd><p>parent of a cell that does not belong to the colony</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">NO_GUESS</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span></em><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dd><p>parent of cell for which the algorithm failed to guess</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Lineage.parent_ids">
+<span class="sig-name descname"><span class="pre">parent_ids</span></span><em class="property"><span class="w"> </span><span class="pre">:numpy.ndarray</span></em><a class="headerlink" href="#bread.data.Lineage.parent_ids" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Lineage.bud_ids">
+<span class="sig-name descname"><span class="pre">bud_ids</span></span><em class="property"><span class="w"> </span><span class="pre">:numpy.ndarray</span></em><a class="headerlink" href="#bread.data.Lineage.bud_ids" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Lineage.time_ids">
+<span class="sig-name descname"><span class="pre">time_ids</span></span><em class="property"><span class="w"> </span><span class="pre">:numpy.ndarray</span></em><a class="headerlink" href="#bread.data.Lineage.time_ids" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Lineage.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Lineage.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Lineage.save_csv">
+<span class="sig-name descname"><span class="pre">save_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Lineage.save_csv" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Lineage.from_csv">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bread.data.Lineage" title="bread.data.Lineage"><span class="pre">Lineage</span></a></span></span><a class="headerlink" href="#bread.data.Lineage.from_csv" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.data.Microscopy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">Microscopy</span></span><a class="headerlink" href="#bread.data.Microscopy" title="Permalink to this definition"></a></dt>
+<dd><p>Store a raw microscopy movie.</p>
+<dl class="simple">
+<dt>data<span class="classifier">numpy.ndarray (shape=(T, W, H))</span></dt><dd><p>T : number of timeframes
+W, H : shape of the images</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Microscopy.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="w"> </span><span class="pre">:numpy.ndarray</span></em><a class="headerlink" href="#bread.data.Microscopy.data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Microscopy.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Microscopy.__getitem__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Microscopy.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Microscopy.__len__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Microscopy.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Microscopy.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Microscopy.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bread.data.Microscopy.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Microscopy.from_tiff">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_tiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bread.data.Microscopy" title="bread.data.Microscopy"><span class="pre">Microscopy</span></a></span></span><a class="headerlink" href="#bread.data.Microscopy.from_tiff" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Microscopy.from_npzs">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_npzs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepaths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bread.data.Microscopy" title="bread.data.Microscopy"><span class="pre">Microscopy</span></a></span></span><a class="headerlink" href="#bread.data.Microscopy.from_npzs" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a microscopy movie from a list <cite>.npz</cite> files. Each <cite>.npz</cite> file stores one 2D array, corresponding to a frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepaths</strong> (<em>Union</em><em>[</em><em>Path</em><em>, </em><em>list</em><em>[</em><em>Path</em><em>]</em><em>]</em>) – Paths to the <cite>.npz</cite> files. If only a <cite>Path</cite> is given, assumes one frame in movie.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#bread.data.Microscopy" title="bread.data.Microscopy">Microscopy</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.data.Segmentation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">Segmentation</span></span><a class="headerlink" href="#bread.data.Segmentation" title="Permalink to this definition"></a></dt>
+<dd><p>Store a segmentation movie.</p>
+<p>Each image stores ids corresponding to the mask of the corresponding cell.</p>
+<dl class="simple">
+<dt>data<span class="classifier">numpy.ndarray (shape=(T, W, H))</span></dt><dd><p>T : number of timeframes
+W, H : shape of the images</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Segmentation.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="w"> </span><span class="pre">:numpy.ndarray</span></em><a class="headerlink" href="#bread.data.Segmentation.data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Segmentation.__getitem__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Segmentation.__len__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Segmentation.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bread.data.Segmentation.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.cell_ids">
+<span class="sig-name descname"><span class="pre">cell_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#bread.data.Segmentation.cell_ids" title="Permalink to this definition"></a></dt>
+<dd><p>Returns cell ids from a segmentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_id</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – frame index in the movie. If None, returns all the cellids encountered in the movie</p></li>
+<li><p><strong>background_id</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – if not None, remove id <cite>background_id</cite> from the cell ids</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>cell ids contained in the segmentation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.cms">
+<span class="sig-name descname"><span class="pre">cms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#bread.data.Segmentation.cms" title="Permalink to this definition"></a></dt>
+<dd><p>Returns centers of mass of cells in a segmentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_id</strong> (<em>int</em>) – Frame index in the movie</p></li>
+<li><p><strong>cell_ids</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – List of cell ids for which to compute the centers of mass, by default None.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">cell_ids</span></code> becomes all the cells in the frame</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>coordinates of the centers of mass of each cell</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape (ncells, 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.find_buds">
+<span class="sig-name descname"><span class="pre">find_buds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bread.data.Lineage" title="bread.data.Lineage"><span class="pre">Lineage</span></a></span></span><a class="headerlink" href="#bread.data.Segmentation.find_buds" title="Permalink to this definition"></a></dt>
+<dd><p>Return IDs of newly created cells</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>lineage</strong> – initialized lineage, with nan parent ids</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#bread.data.Lineage" title="bread.data.Lineage">Lineage</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.from_h5">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'FOV0'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bread.data.Segmentation" title="bread.data.Segmentation"><span class="pre">Segmentation</span></a></span></span><a class="headerlink" href="#bread.data.Segmentation.from_h5" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Segmentation.from_npzs">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_npzs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepaths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bread.data.Segmentation" title="bread.data.Segmentation"><span class="pre">Segmentation</span></a></span></span><a class="headerlink" href="#bread.data.Segmentation.from_npzs" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a segmentation movie from a list <cite>.npz</cite> files. Each <cite>.npz</cite> file stores one 2D array, corresponding to a frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepaths</strong> (<em>Union</em><em>[</em><em>Path</em><em>, </em><em>list</em><em>[</em><em>Path</em><em>]</em><em>]</em>) – Paths to the <cite>.npz</cite> files. If only a <cite>Path</cite> is given, assumes one frame in movie.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#bread.data.Segmentation" title="bread.data.Segmentation">Segmentation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.data.Contour">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">Contour</span></span><a class="headerlink" href="#bread.data.Contour" title="Permalink to this definition"></a></dt>
+<dd><p>Stores indices of the contour of the cell</p>
+<dl class="simple">
+<dt>data<span class="classifier">numpy.ndarray (shape=(N, 2))</span></dt><dd><p>Stores a list of (x, y) points corresponding to indices of the contour.
+Warning : images are indexes as <cite>img[y, x]</cite>, so use <cite>img[contour[:, 1], contour[:, 0]]</cite></p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Contour.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="w"> </span><span class="pre">:numpy.ndarray</span></em><a class="headerlink" href="#bread.data.Contour.data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Contour.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Contour.__getitem__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Contour.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Contour.__len__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Contour.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Contour.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Contour.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bread.data.Contour.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Contour.from_segmentation">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_segmentation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bread.data.Segmentation" title="bread.data.Segmentation"><span class="pre">Segmentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bread.data.Contour" title="bread.data.Contour"><span class="pre">Contour</span></a></span></span><a class="headerlink" href="#bread.data.Contour.from_segmentation" title="Permalink to this definition"></a></dt>
+<dd><p>Return the contour of a cell at a frame in the segmentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seg</strong> (<a class="reference internal" href="#bread.data.Segmentation" title="bread.data.Segmentation"><em>Segmentation</em></a>) – </p></li>
+<li><p><strong>cell_id</strong> (<em>int</em>) – </p></li>
+<li><p><strong>time_id</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#bread.data.Contour" title="bread.data.Contour">Contour</a></p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>Contour.InvalidContourException</strong> – Raised if the cell mask is invalid (often too small or disjointed)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.data.Ellipse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">Ellipse</span></span><a class="headerlink" href="#bread.data.Ellipse" title="Permalink to this definition"></a></dt>
+<dd><p>Store properties of an ellipse.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Ellipse.x">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#bread.data.Ellipse.x" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Ellipse.y">
+<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#bread.data.Ellipse.y" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Ellipse.r_maj">
+<span class="sig-name descname"><span class="pre">r_maj</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#bread.data.Ellipse.r_maj" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Ellipse.r_min">
+<span class="sig-name descname"><span class="pre">r_min</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#bread.data.Ellipse.r_min" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.data.Ellipse.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#bread.data.Ellipse.angle" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.data.Ellipse.from_contour">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contour</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bread.data.Contour" title="bread.data.Contour"><span class="pre">Contour</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.data.Ellipse.from_contour" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="bread.data.BreadException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">BreadException</span></span><a class="headerlink" href="#bread.data.BreadException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">UserWarning</span></code></p>
+<p>Base class for warnings generated by user code.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="bread.data.BreadWarning">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.data.</span></span><span class="sig-name descname"><span class="pre">BreadWarning</span></span><a class="headerlink" href="#bread.data.BreadWarning" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">UserWarning</span></code></p>
+<p>Base class for warnings generated by user code.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../algo/lineage/index.html" class="btn btn-neutral float-left" title="bread.algo.lineage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, G. BRENNA, F. MASSARD, N. VADOT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

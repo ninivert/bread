@@ -1,0 +1,16 @@
+:py:mod:`bread`
+===============
+
+.. py:module:: bread
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   algo/index.rst
+   data/index.rst
+
+

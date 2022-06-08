@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bread.algo.lineage &mdash; bread  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="bread.data" href="../../data/index.html" />
+    <link rel="prev" title="API Reference" href="../../../../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> bread
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html"><code class="docutils literal notranslate"><span class="pre">bread</span></code> – determining lineage of budding yeast cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">bread</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../api.html">API Reference</a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">bread.algo.lineage</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/bread/algo/lineage/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-bread.algo.lineage">
+<span id="bread-algo-lineage"></span><h1><a class="reference internal" href="#module-bread.algo.lineage" title="bread.algo.lineage"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bread.algo.lineage</span></code></a><a class="headerlink" href="#module-bread.algo.lineage" title="Permalink to this headline"></a></h1>
+<div class="section" id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline"></a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.algo.lineage.LineageGuesser" title="bread.algo.lineage.LineageGuesser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesser</span></code></a></p></td>
+<td><p>Construct LineageGuesser</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bread.algo.lineage.LineageGuesserBudLum" title="bread.algo.lineage.LineageGuesserBudLum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesserBudLum</span></code></a></p></td>
+<td><p>Guess lineage relations by looking at the budneck marker intensity along the contour of the bud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.algo.lineage.LineageGuesserExpansionSpeed" title="bread.algo.lineage.LineageGuesserExpansionSpeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesserExpansionSpeed</span></code></a></p></td>
+<td><p>Guess lineage relations by maximizing the expansion velocity of the bud with respect to the candidate parent.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bread.algo.lineage.LineageGuesserMinDistance" title="bread.algo.lineage.LineageGuesserMinDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesserMinDistance</span></code></a></p></td>
+<td><p>Guess lineage relations by finding the cell closest to the bud, when it appears on the segmentation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.algo.lineage.LineageGuesserMinTheta" title="bread.algo.lineage.LineageGuesserMinTheta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesserMinTheta</span></code></a></p></td>
+<td><p>Guess lineage relations by minimizing the angle between the major axis of the candidates and candidate-to-bud vector.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.algo.lineage.extend_budding_event" title="bread.algo.lineage.extend_budding_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend_budding_event</span></code></a>(lineage: bread.data.Lineage, time_index_num, time_index_max=None)</p></td>
+<td><p>add extra time to a budding event from a lineage, for a total of time_index_num frames</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bread.algo.lineage.align_lineages" title="bread.algo.lineage.align_lineages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">align_lineages</span></code></a>(lineage_truth: bread.data.Lineage, lineage_pred: bread.data.Lineage)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bread.algo.lineage.accuracy" title="bread.algo.lineage.accuracy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">accuracy</span></code></a>(lineage_truth: bread.data.Lineage, lineage_pred: bread.data.Lineage, strict: bool = True) → float</p></td>
+<td><p>Compute the accuracy of a guessed lineage</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="bread.algo.lineage.extend_budding_event">
+<span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">extend_budding_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lineage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../data/index.html#bread.data.Lineage" title="bread.data.Lineage"><span class="pre">bread.data.Lineage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_index_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_index_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.algo.lineage.extend_budding_event" title="Permalink to this definition"></a></dt>
+<dd><p>add extra time to a budding event from a lineage, for a total of time_index_num frames</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bread.algo.lineage.align_lineages">
+<span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">align_lineages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lineage_truth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../data/index.html#bread.data.Lineage" title="bread.data.Lineage"><span class="pre">bread.data.Lineage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineage_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../data/index.html#bread.data.Lineage" title="bread.data.Lineage"><span class="pre">bread.data.Lineage</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.algo.lineage.align_lineages" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bread.algo.lineage.accuracy">
+<span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lineage_truth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../data/index.html#bread.data.Lineage" title="bread.data.Lineage"><span class="pre">bread.data.Lineage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineage_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../data/index.html#bread.data.Lineage" title="bread.data.Lineage"><span class="pre">bread.data.Lineage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#bread.algo.lineage.accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the accuracy of a guessed lineage</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lineage_truth</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Lineage" title="bread.data._data.Lineage"><em>Lineage</em></a>) – ground truth lineage</p></li>
+<li><p><strong>lineage_pred</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Lineage" title="bread.data._data.Lineage"><em>Lineage</em></a>) – guessed lineage (see <code class="docutils literal notranslate"><span class="pre">bread.algo.lineage.LineageGuesser</span></code>)</p></li>
+<li><p><strong>strict</strong> (<em>bool</em><em>, </em><em>optional</em>) – penalize abscence of a guess, by default True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>score</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">LineageGuesser</span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesser" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Construct LineageGuesser</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seg</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Segmentation" title="bread.data._data.Segmentation"><em>Segmentation</em></a>) – </p></li>
+<li><p><strong>nn_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – Cell masks separated by less than this threshold are considered neighbours. by default 8.0.</p></li>
+<li><p><strong>flexible_threshold</strong> (<em>bool</em><em>, </em><em>optional</em>) – If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.</p></li>
+<li><p><strong>num_frames_refractory</strong> (<em>int</em><em>, </em><em>optional</em>) – After a parent cell has budded, exclude it from the parent pool in the next frames.
+It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+A value of 0 corresponds to no refractory period.
+by default 0.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesser.segmentation">
+<span class="sig-name descname"><span class="pre">segmentation</span></span><em class="property"><span class="w"> </span><span class="pre">:bread.data.Segmentation</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesser.segmentation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesser.nn_threshold">
+<span class="sig-name descname"><span class="pre">nn_threshold</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesser.nn_threshold" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesser.flexible_nn_threshold">
+<span class="sig-name descname"><span class="pre">flexible_nn_threshold</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesser.flexible_nn_threshold" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesser.num_frames_refractory">
+<span class="sig-name descname"><span class="pre">num_frames_refractory</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesser.num_frames_refractory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesser.guess_parent">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">guess_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bud_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesser.guess_parent" title="Permalink to this definition"></a></dt>
+<dd><p>Guess the parent associated to a bud</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bud_id</strong> (<em>int</em>) – id of the bud in the segmentation</p></li>
+<li><p><strong>time_id</strong> (<em>int</em>) – frame index in the movie</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>parent_id</strong> – guessed parent id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesser.guess_lineage">
+<span class="sig-name descname"><span class="pre">guess_lineage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.algo.lineage.LineageGuesser.guess_lineage" title="Permalink to this definition"></a></dt>
+<dd><p>Guess the full lineage of a given bud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>lineage</strong> (<em>Lineage</em>) – guessed lineage</p></li>
+<li><p><strong>progress_callback</strong> (<em>Callable[[int, int]] or None</em>) – callback for progress</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserBudLum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">LineageGuesserBudLum</span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserBudLum" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">_MajorityVoteMixin</span></code>, <a class="reference internal" href="#bread.algo.lineage.LineageGuesser" title="bread.algo.lineage.LineageGuesser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesser</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">_BudneckMixin</span></code></p>
+<p>Guess lineage relations by looking at the budneck marker intensity along the contour of the bud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segmentation</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Segmentation" title="bread.data._data.Segmentation"><em>Segmentation</em></a>) – </p></li>
+<li><p><strong>budneck_img</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Microscopy" title="bread.data._data.Microscopy"><em>Microscopy</em></a>) – </p></li>
+<li><p><strong>nn_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – Cell masks separated by less than this threshold are considered neighbors, by default 8.0.</p></li>
+<li><p><strong>flexible_nn_threshold</strong> (<em>bool</em><em>, </em><em>optional</em>) – If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.</p></li>
+<li><p><strong>num_frames_refractory</strong> (<em>int</em><em>, </em><em>optional</em>) – After a parent cell has budded, exclude it from the parent pool in the next frames.
+It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+A value of 0 corresponds to no refractory period.
+by default 0.</p></li>
+<li><p><strong>num_frames</strong> (<em>int</em><em>, </em><em>default 5</em>) – Number of frames to watch the budneck marker channel for.
+The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy.</p></li>
+<li><p><strong>offset_frames</strong> (<em>int</em><em>, </em><em>default 0</em>) – Wait this number of frames after bud appears before guessing parent.
+Useful if the GFP peak is often delayed.</p></li>
+<li><p><strong>kernel_N</strong> (<em>int</em><em>, </em><em>default 30</em>) – Size of the gaussian smoothing kernel in pixels. larger means smoother intensity curves.</p></li>
+<li><p><strong>kernel_sigma</strong> (<em>int</em><em>, </em><em>default 1</em>) – Number of standard deviations to consider for the smoothing kernel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserBudLum.kernel_N">
+<span class="sig-name descname"><span class="pre">kernel_N</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span> <span class="pre">=</span> <span class="pre">30</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesserBudLum.kernel_N" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserBudLum.kernel_sigma">
+<span class="sig-name descname"><span class="pre">kernel_sigma</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesserBudLum.kernel_sigma" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserBudLum.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserBudLum.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserExpansionSpeed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">LineageGuesserExpansionSpeed</span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserExpansionSpeed" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bread.algo.lineage.LineageGuesser" title="bread.algo.lineage.LineageGuesser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesser</span></code></a></p>
+<p>Guess lineage relations by maximizing the expansion velocity of the bud with respect to the candidate parent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segmentation</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Segmentation" title="bread.data._data.Segmentation"><em>Segmentation</em></a>) – </p></li>
+<li><p><strong>nn_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – cell masks separated by less than this threshold are considered neighbors, by default 8.0.</p></li>
+<li><p><strong>flexible_nn_threshold</strong> (<em>bool</em><em>, </em><em>optional</em>) – If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.</p></li>
+<li><p><strong>num_frames_refractory</strong> (<em>int</em><em>, </em><em>optional</em>) – After a parent cell has budded, exclude it from the parent pool in the next frames.
+It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+A value of 0 corresponds to no refractory period.
+by default 0.</p></li>
+<li><p><strong>num_frames</strong> (<em>int</em><em>, </em><em>optional</em>) – How many frames to consider to compute expansion velocity.
+At least 2 frames should be considered for good results.
+by default 5.</p></li>
+<li><p><strong>ignore_dist_nan</strong> (<em>bool</em><em>, </em><em>optional</em>) – In some cases the computed expansion distance encounters an error (candidate parent flushed away, invalid contour, etc.),
+then the computed distance is replaced by nan for the given frame.
+If this happens for many frames, the computed expansion speed might be nan.
+Enabling this parameter ignores candidates for which the computed expansion speed is nan, otherwise raises an error.
+by default True.</p></li>
+<li><p><strong>bud_distance_max</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximal distance (in pixels) between points on the parent and bud contours to be considered as part of the “budding interface”.
+by default 7.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserExpansionSpeed.num_frames">
+<span class="sig-name descname"><span class="pre">num_frames</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesserExpansionSpeed.num_frames" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserExpansionSpeed.ignore_dist_nan">
+<span class="sig-name descname"><span class="pre">ignore_dist_nan</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesserExpansionSpeed.ignore_dist_nan" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserExpansionSpeed.bud_distance_max">
+<span class="sig-name descname"><span class="pre">bud_distance_max</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#bread.algo.lineage.LineageGuesserExpansionSpeed.bud_distance_max" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserExpansionSpeed.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserExpansionSpeed.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserExpansionSpeed.guess_parent">
+<span class="sig-name descname"><span class="pre">guess_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bud_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserExpansionSpeed.guess_parent" title="Permalink to this definition"></a></dt>
+<dd><p>Guess the parent associated to a bud</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bud_id</strong> (<em>int</em>) – id of the bud in the segmentation</p></li>
+<li><p><strong>time_id</strong> (<em>int</em>) – frame index in the movie</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>parent_id</strong> – guessed parent id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserMinDistance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">LineageGuesserMinDistance</span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserMinDistance" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bread.algo.lineage.LineageGuesser" title="bread.algo.lineage.LineageGuesser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesser</span></code></a></p>
+<p>Guess lineage relations by finding the cell closest to the bud, when it appears on the segmentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segmentation</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Segmentation" title="bread.data._data.Segmentation"><em>Segmentation</em></a>) – </p></li>
+<li><p><strong>nn_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – cell masks separated by less than this threshold are considered neighbors, by default 8.0.</p></li>
+<li><p><strong>flexible_nn_threshold</strong> (<em>bool</em><em>, </em><em>optional</em>) – If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.</p></li>
+<li><p><strong>num_frames_refractory</strong> (<em>int</em><em>, </em><em>optional</em>) – After a parent cell has budded, exclude it from the parent pool in the next frames.
+It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+A value of 0 corresponds to no refractory period.
+by default 0.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserMinDistance.guess_parent">
+<span class="sig-name descname"><span class="pre">guess_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bud_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserMinDistance.guess_parent" title="Permalink to this definition"></a></dt>
+<dd><p>Guess the parent associated to a bud</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bud_id</strong> (<em>int</em>) – id of the bud in the segmentation</p></li>
+<li><p><strong>time_id</strong> (<em>int</em>) – frame index in the movie</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>parent_id</strong> – guessed parent id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageGuesserMinTheta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">LineageGuesserMinTheta</span></span><a class="headerlink" href="#bread.algo.lineage.LineageGuesserMinTheta" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">_MajorityVoteMixin</span></code>, <a class="reference internal" href="#bread.algo.lineage.LineageGuesser" title="bread.algo.lineage.LineageGuesser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageGuesser</span></code></a></p>
+<p>Guess lineage relations by minimizing the angle between the major axis of the candidates and candidate-to-bud vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segmentation</strong> (<a class="reference internal" href="../../data/_data/index.html#bread.data._data.Segmentation" title="bread.data._data.Segmentation"><em>Segmentation</em></a>) – </p></li>
+<li><p><strong>nn_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – cell masks separated by less than this threshold are considered neighbors, by default 8.0.</p></li>
+<li><p><strong>flexible_nn_threshold</strong> (<em>bool</em><em>, </em><em>optional</em>) – If no nearest neighbours are found within the given threshold, try to find the closest one, by default False.</p></li>
+<li><p><strong>num_frames_refractory</strong> (<em>int</em><em>, </em><em>optional</em>) – After a parent cell has budded, exclude it from the parent pool in the next frames.
+It is recommended to set it to a low estimate, as high values will cause mistakes to propagate in time.
+A value of 0 corresponds to no refractory period.
+by default 0.</p></li>
+<li><p><strong>num_frames</strong> (<em>int</em><em>, </em><em>default 5</em>) – Number of frames to make guesses for after the bud has appeared.
+The algorithm makes a guess for each frame, then predicts a parent by majority-vote policy.</p></li>
+<li><p><strong>offset_frames</strong> (<em>int</em><em>, </em><em>default 0</em>) – Wait this number of frames after bud appears before guessing parent.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">LineageException</span></span><a class="headerlink" href="#bread.algo.lineage.LineageException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../data/index.html#bread.data.BreadException" title="bread.data.BreadException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bread.data.BreadException</span></code></a></p>
+<p>Base class for warnings generated by user code.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="bread.algo.lineage.LineageWarning">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">LineageWarning</span></span><a class="headerlink" href="#bread.algo.lineage.LineageWarning" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../data/index.html#bread.data.BreadWarning" title="bread.data.BreadWarning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bread.data.BreadWarning</span></code></a></p>
+<p>Base class for warnings generated by user code.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="bread.algo.lineage.NotEnoughFramesException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">NotEnoughFramesException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bud_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_requested</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_remaining</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.algo.lineage.NotEnoughFramesException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bread.algo.lineage.LineageException" title="bread.algo.lineage.LineageException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageException</span></code></a></p>
+<p>Base class for warnings generated by user code.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="bread.algo.lineage.NotEnoughFramesWarning">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bread.algo.lineage.</span></span><span class="sig-name descname"><span class="pre">NotEnoughFramesWarning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bud_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_requested</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_remaining</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bread.algo.lineage.NotEnoughFramesWarning" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bread.algo.lineage.LineageWarning" title="bread.algo.lineage.LineageWarning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineageWarning</span></code></a></p>
+<p>Base class for warnings generated by user code.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../data/index.html" class="btn btn-neutral float-right" title="bread.data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, G. BRENNA, F. MASSARD, N. VADOT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
